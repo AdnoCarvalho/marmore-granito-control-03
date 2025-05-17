@@ -16,11 +16,14 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Search, Plus, ExternalLink } from "lucide-react";
 import { mockClients } from "@/utils/mockData";
 import { Client, UserRole } from "@/types";
+import { toast } from "sonner";
 
 const ClientList = () => {
   const { checkPermission } = useAuth();
@@ -28,6 +31,13 @@ const ClientList = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogType, setDialogType] = useState<"add" | "details">("add");
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [newClientForm, setNewClientForm] = useState({
+    companyName: "",
+    cnpj: "",
+    contactName: "",
+    email: "",
+    phone: "",
+  });
 
   const canAddClient = checkPermission([UserRole.ADMIN]);
 
@@ -47,8 +57,32 @@ const ClientList = () => {
   };
 
   const handleAddNew = () => {
+    setNewClientForm({
+      companyName: "",
+      cnpj: "",
+      contactName: "",
+      email: "",
+      phone: "",
+    });
     setDialogType("add");
     setShowDialog(true);
+  };
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewClientForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAddClient = () => {
+    // In a real app this would be an API call
+    // Here we're just showing a toast confirmation
+    toast("Cliente adicionado", {
+      description: `${newClientForm.companyName} foi adicionado com sucesso.`
+    });
+    setShowDialog(false);
   };
 
   const formatCNPJ = (cnpj: string) => {
@@ -61,7 +95,7 @@ const ClientList = () => {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search clients..."
+            placeholder="Buscar clientes..."
             className="pl-8"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -136,14 +170,72 @@ const ClientList = () => {
             <DialogTitle>
               {dialogType === "add" ? "Add New Client" : "Client Details"}
             </DialogTitle>
+            {dialogType === "add" && (
+              <DialogDescription>
+                Preencha os dados para adicionar um novo cliente ao sistema.
+              </DialogDescription>
+            )}
           </DialogHeader>
 
           {dialogType === "add" ? (
             <div className="grid gap-4 py-4">
-              <p className="text-muted-foreground text-sm italic">
-                This is a demo version. Client creation is not implemented.
-              </p>
-              {/* Form fields would go here in a real implementation */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label htmlFor="companyName" className="text-sm font-medium">Nome da Empresa</label>
+                  <Input 
+                    id="companyName"
+                    name="companyName"
+                    value={newClientForm.companyName}
+                    onChange={handleFormChange}
+                    placeholder="Nome da Empresa" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="cnpj" className="text-sm font-medium">CNPJ</label>
+                  <Input 
+                    id="cnpj"
+                    name="cnpj"
+                    value={newClientForm.cnpj}
+                    onChange={handleFormChange}
+                    placeholder="00.000.000/0000-00" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="contactName" className="text-sm font-medium">Nome do Contato</label>
+                  <Input 
+                    id="contactName"
+                    name="contactName"
+                    value={newClientForm.contactName}
+                    onChange={handleFormChange}
+                    placeholder="Nome completo" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium">E-mail</label>
+                  <Input 
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={newClientForm.email}
+                    onChange={handleFormChange}
+                    placeholder="email@empresa.com" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
+                  <Input 
+                    id="phone"
+                    name="phone"
+                    value={newClientForm.phone}
+                    onChange={handleFormChange}
+                    placeholder="(00) 00000-0000" 
+                  />
+                </div>
+              </div>
+              <DialogFooter className="mt-4">
+                <Button variant="outline" onClick={() => setShowDialog(false)}>Cancelar</Button>
+                <Button onClick={handleAddClient}>Adicionar Cliente</Button>
+              </DialogFooter>
             </div>
           ) : (
             selectedClient && (

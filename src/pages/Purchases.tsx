@@ -12,7 +12,7 @@ const Purchases = () => {
   const navigate = useNavigate();
 
   const handleNewPurchase = () => {
-    navigate('/purchases/create', { state: { defaultTab: 'nova' } });
+    navigate('/purchases/create');
   };
 
   return (
