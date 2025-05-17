@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SalesForm from "@/components/sales/SalesForm";
 import SalesList from "@/components/sales/SalesList";
 import SalesChart from "@/components/sales/SalesChart";
+import SalesDashboard from "@/components/sales/SalesDashboard";
 
 const Sales = () => {
   return (
@@ -16,6 +17,8 @@ const Sales = () => {
             Gestão de vendas, histórico e análise de desempenho.
           </p>
         </div>
+
+        <SalesDashboard />
 
         <Tabs defaultValue="nova" className="space-y-4">
           <TabsList className="grid w-full grid-cols-3 md:w-auto md:inline-flex">

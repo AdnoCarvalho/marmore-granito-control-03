@@ -1,6 +1,7 @@
 
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import InventoryList from '@/components/inventory/InventoryList';
+import InventoryDashboard from '@/components/inventory/InventoryDashboard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Inventory = () => {
@@ -13,6 +14,8 @@ const Inventory = () => {
             Cadastre, visualize e gerencie todos os materiais disponíveis em seu estoque.
           </p>
         </div>
+        
+        <InventoryDashboard />
         
         <Card className="shadow-card hover:shadow-card-hover transition-all duration-300">
           <CardHeader className="pb-3">

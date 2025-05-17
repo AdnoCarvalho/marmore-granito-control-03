@@ -65,6 +65,13 @@ const SalesChart = () => {
     quartzite: { label: "Quartzito", color: materialColors.quartzite },
   };
 
+  // Fallback para quando não há dados
+  const noDataFallback = (
+    <div className="flex items-center justify-center h-64">
+      <p className="text-muted-foreground">Não há dados de vendas disponíveis para exibir</p>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
       {/* Gráfico principal */}
@@ -74,39 +81,41 @@ const SalesChart = () => {
         </CardHeader>
         <CardContent>
           <div className="h-80">
-            <ChartContainer config={chartConfig}>
-              <BarChart
-                data={monthlySalesData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <ChartLegend
-                  content={<ChartLegendContent />}
-                  verticalAlign="top"
-                />
-                <Bar
-                  dataKey="marble"
-                  name="Mármore"
-                  stackId="a"
-                  fill={materialColors.marble}
-                />
-                <Bar
-                  dataKey="granite"
-                  name="Granito"
-                  stackId="a"
-                  fill={materialColors.granite}
-                />
-                <Bar
-                  dataKey="quartzite"
-                  name="Quartzito"
-                  stackId="a"
-                  fill={materialColors.quartzite}
-                />
-              </BarChart>
-            </ChartContainer>
+            {monthlySalesData.length > 0 ? (
+              <ChartContainer config={chartConfig}>
+                <BarChart
+                  data={monthlySalesData}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <ChartLegend
+                    content={<ChartLegendContent />}
+                    verticalAlign="top"
+                  />
+                  <Bar
+                    dataKey="marble"
+                    name="Mármore"
+                    stackId="a"
+                    fill={materialColors.marble}
+                  />
+                  <Bar
+                    dataKey="granite"
+                    name="Granito"
+                    stackId="a"
+                    fill={materialColors.granite}
+                  />
+                  <Bar
+                    dataKey="quartzite"
+                    name="Quartzito"
+                    stackId="a"
+                    fill={materialColors.quartzite}
+                  />
+                </BarChart>
+              </ChartContainer>
+            ) : noDataFallback}
           </div>
         </CardContent>
       </Card>
