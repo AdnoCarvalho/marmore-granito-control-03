@@ -25,7 +25,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { Wallet, TrendingUp, TrendingDown, Calendar as CalendarIcon } from "lucide-react";
+import { Wallet, TrendingUp, TrendingDown, CalendarIcon } from "lucide-react";
 import { format, subMonths, isWithinInterval, startOfMonth, endOfMonth } from "date-fns";
 
 const FinancialSummary = () => {
@@ -155,7 +155,7 @@ const FinancialSummary = () => {
           {showCalendar && (
             <div className="absolute right-0 mt-1 bg-card shadow-lg rounded-lg z-10 border">
               <Calendar
-                mode="month"
+                mode="single"
                 selected={selectedMonth}
                 onSelect={(date) => {
                   if (date) {
@@ -163,6 +163,8 @@ const FinancialSummary = () => {
                     setShowCalendar(false);
                   }
                 }}
+                initialFocus
+                className="pointer-events-auto"
               />
             </div>
           )}
