@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link, useLocation } from "react-router-dom";
@@ -14,7 +13,7 @@ import {
   Bell, 
   ChevronDown,
   ShoppingCart,
-  Package // Added Package icon for Purchases
+  Package
 } from "lucide-react";
 import { UserRole } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -32,6 +31,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  SidebarProvider,
+  useSidebar,
+} from "@/components/ui/sidebar";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -60,10 +63,11 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isActive, onCl
   </Link>
 );
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayoutContent = ({ children }: MainLayoutProps) => {
   const { user, logout, checkPermission } = useAuth();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { toggleSidebar, openMobile, setOpenMobile } = useSidebar();
 
   // Itens de navegação com controle de permissão
   const navItems = [
@@ -112,6 +116,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+    setOpenMobile(false);
   };
 
   return (
@@ -181,7 +186,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       </div>
 
       {/* Mobile Sidebar */}
-      <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+      <Sheet open={openMobile} onOpenChange={setOpenMobile}>
         <SheetContent side="left" className="w-72 p-0">
           <div className="h-16 flex items-center border-b px-6">
             <Link 
@@ -245,13 +250,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       </Sheet>
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1 overflow-hidden w-full">
         <header className="h-16 flex items-center border-b border-slate-200 bg-white shadow-sm px-6 gap-4">
           <Button 
             variant="ghost" 
             size="icon" 
             className="md:hidden" 
-            onClick={() => setIsMobileMenuOpen(true)}
+            onClick={toggleSidebar}
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -278,11 +283,19 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           </div>
         </header>
         
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto w-full">
           {children}
         </main>
       </div>
     </div>
+  );
+};
+
+const MainLayout = ({ children }: MainLayoutProps) => {
+  return (
+    <SidebarProvider defaultOpen={false}>
+      <MainLayoutContent>{children}</MainLayoutContent>
+    </SidebarProvider>
   );
 };
 

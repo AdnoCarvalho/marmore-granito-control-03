@@ -1,5 +1,4 @@
 
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,7 +27,7 @@ const Purchases = () => {
           
           <Button 
             onClick={handleNewPurchase}
-            className="bg-[#F9802D] hover:bg-[#E57220] text-white"
+            className="bg-[#F9802D] hover:bg-[#E57220] text-white w-full md:w-auto"
           >
             <Package className="mr-2 h-4 w-4" />
             Nova Compra
