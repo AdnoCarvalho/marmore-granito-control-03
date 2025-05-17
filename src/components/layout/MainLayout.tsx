@@ -12,7 +12,8 @@ import {
   X, 
   Search, 
   Bell, 
-  ChevronDown
+  ChevronDown,
+  ShoppingCart
 } from "lucide-react";
 import { UserRole } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -81,6 +82,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       to: "/clients",
       icon: Users,
       label: "Clientes",
+      roles: [UserRole.MANAGER, UserRole.ADMIN],
+    },
+    {
+      to: "/sales",
+      icon: ShoppingCart,
+      label: "Vendas",
       roles: [UserRole.MANAGER, UserRole.ADMIN],
     },
     {

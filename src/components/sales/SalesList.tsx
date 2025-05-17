@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -27,7 +28,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
-import { Sale, SaleOrigin } from "@/types";
+import { Sale, SaleOrigin, MaterialType, MaterialSubtype } from "@/types";
 
 const SalesList = () => {
   // Estados para os filtros
@@ -90,9 +91,24 @@ const SalesList = () => {
   ];
 
   const mockMaterials = [
-    { id: "1", name: "Mármore Branco Carrara" },
-    { id: "2", name: "Granito Preto São Gabriel" },
-    { id: "3", name: "Quartzito Taj Mahal" },
+    { 
+      id: "1", 
+      name: "Mármore Branco Carrara", 
+      type: MaterialType.MARBLE,
+      subtype: MaterialSubtype.SLAB
+    },
+    { 
+      id: "2", 
+      name: "Granito Preto São Gabriel", 
+      type: MaterialType.GRANITE,
+      subtype: MaterialSubtype.BLOCK 
+    },
+    { 
+      id: "3", 
+      name: "Quartzito Taj Mahal", 
+      type: MaterialType.QUARTZITE,
+      subtype: MaterialSubtype.SLAB 
+    },
   ];
 
   const mockSellers = [
@@ -107,9 +123,32 @@ const SalesList = () => {
     return client ? client.name : "Cliente não encontrado";
   };
 
-  const getMaterialName = (materialId: string) => {
+  const getMaterial = (materialId: string) => {
     const material = mockMaterials.find(m => m.id === materialId);
-    return material ? material.name : "Material não encontrado";
+    return material || { name: "Material não encontrado", type: MaterialType.MARBLE, subtype: MaterialSubtype.SLAB };
+  };
+
+  const getMaterialName = (materialId: string) => {
+    return getMaterial(materialId).name;
+  };
+
+  const getMaterialType = (materialId: string) => {
+    const material = getMaterial(materialId);
+    const types = {
+      [MaterialType.MARBLE]: "Mármore",
+      [MaterialType.GRANITE]: "Granito",
+      [MaterialType.QUARTZITE]: "Quartzito"
+    };
+    return types[material.type] || material.type;
+  };
+
+  const getMaterialSubtype = (materialId: string) => {
+    const material = getMaterial(materialId);
+    const subtypes = {
+      [MaterialSubtype.SLAB]: "Chapa",
+      [MaterialSubtype.BLOCK]: "Bloco"
+    };
+    return subtypes[material.subtype || MaterialSubtype.SLAB] || "Não especificado";
   };
 
   const getSellerName = (sellerId: string) => {
@@ -131,11 +170,11 @@ const SalesList = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "paid":
-        return <Badge variant="outline" className="bg-status-paid/10 text-status-paid border-status-paid/20">Pago</Badge>;
+        return <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">Pago</Badge>;
       case "pending":
-        return <Badge variant="outline" className="bg-status-pending/10 text-status-pending border-status-pending/20">Pendente</Badge>;
+        return <Badge variant="outline" className="bg-yellow-50 text-yellow-600 border-yellow-200">Pendente</Badge>;
       case "cancelled":
-        return <Badge variant="outline" className="bg-status-cancelled/10 text-status-cancelled border-status-cancelled/20">Cancelado</Badge>;
+        return <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200">Cancelado</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -257,6 +296,8 @@ const SalesList = () => {
                 <TableRow>
                   <TableHead>Cliente</TableHead>
                   <TableHead>Material</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Subtipo</TableHead>
                   <TableHead>Qtd</TableHead>
                   <TableHead>Data</TableHead>
                   <TableHead>Vendedor</TableHead>
@@ -271,6 +312,8 @@ const SalesList = () => {
                     <TableRow key={sale.id} className="hover:bg-muted/50 transition-colors">
                       <TableCell className="font-medium">{getClientName(sale.clientId)}</TableCell>
                       <TableCell>{getMaterialName(sale.materialId)}</TableCell>
+                      <TableCell>{getMaterialType(sale.materialId)}</TableCell>
+                      <TableCell>{getMaterialSubtype(sale.materialId)}</TableCell>
                       <TableCell>{sale.quantity}</TableCell>
                       <TableCell>{format(sale.date, "dd/MM/yyyy", { locale: ptBR })}</TableCell>
                       <TableCell>{getSellerName(sale.sellerId)}</TableCell>
@@ -281,7 +324,7 @@ const SalesList = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-6 text-muted-foreground">
+                    <TableCell colSpan={10} className="text-center py-6 text-muted-foreground">
                       Nenhuma venda encontrada com os filtros aplicados.
                     </TableCell>
                   </TableRow>

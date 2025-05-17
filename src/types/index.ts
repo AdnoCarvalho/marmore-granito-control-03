@@ -103,7 +103,7 @@ export interface SalesSummary {
   percentageOfTotal: number;
 }
 
-// Nova interface para vendas
+// Interface para vendas
 export enum SaleOrigin {
   DIRECT = "direct", // Venda direta
   REFERENCE = "reference", // Referência
