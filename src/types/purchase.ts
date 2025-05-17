@@ -42,3 +42,18 @@ export interface PurchaseFormValues {
   purchaseDate: Date;
   notes?: string;
 }
+
+// New interface for the purchase stats dashboard
+export interface PurchaseStats {
+  totalSpent: number;
+  totalQuantity: number;
+  lastSupplier: {
+    name: string;
+    date: Date;
+  };
+  purchasesByType: {
+    type: string;
+    value: number;
+    count: number;
+  }[];
+}
