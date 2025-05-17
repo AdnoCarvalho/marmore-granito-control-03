@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -310,11 +309,11 @@ const SalesForm = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="direct">Venda Direta</SelectItem>
-                        <SelectItem value="reference">Referência</SelectItem>
-                        <SelectItem value="social_media">Redes Sociais</SelectItem>
-                        <SelectItem value="website">Website</SelectItem>
-                        <SelectItem value="other">Outra</SelectItem>
+                        <SelectItem value={SaleOrigin.DIRECT}>Venda Direta</SelectItem>
+                        <SelectItem value={SaleOrigin.REFERENCE}>Referência</SelectItem>
+                        <SelectItem value={SaleOrigin.SOCIAL_MEDIA}>Redes Sociais</SelectItem>
+                        <SelectItem value={SaleOrigin.WEBSITE}>Website</SelectItem>
+                        <SelectItem value={SaleOrigin.OTHER}>Outra</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -28,7 +27,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
-import { Sale } from "@/types";
+import { Sale, SaleOrigin } from "@/types";
 
 const SalesList = () => {
   // Estados para os filtros
@@ -45,7 +44,7 @@ const SalesList = () => {
       materialId: "1",
       quantity: 3,
       sellerId: "2",
-      origin: "direct",
+      origin: SaleOrigin.DIRECT,
       totalValue: 4500,
       status: "paid",
     },
@@ -56,7 +55,7 @@ const SalesList = () => {
       materialId: "2",
       quantity: 2,
       sellerId: "1",
-      origin: "reference",
+      origin: SaleOrigin.REFERENCE,
       totalValue: 2400,
       status: "pending",
     },
@@ -67,7 +66,7 @@ const SalesList = () => {
       materialId: "3",
       quantity: 1,
       sellerId: "3",
-      origin: "website",
+      origin: SaleOrigin.WEBSITE,
       totalValue: 2200,
       status: "paid",
     },
@@ -78,7 +77,7 @@ const SalesList = () => {
       materialId: "2",
       quantity: 5,
       sellerId: "2",
-      origin: "social_media",
+      origin: SaleOrigin.SOCIAL_MEDIA,
       totalValue: 6000,
       status: "cancelled",
     },
@@ -118,13 +117,13 @@ const SalesList = () => {
     return seller ? seller.name : "Vendedor não encontrado";
   };
 
-  const getOriginLabel = (origin: string) => {
+  const getOriginLabel = (origin: SaleOrigin) => {
     const labels: Record<string, string> = {
-      direct: "Venda Direta",
-      reference: "Referência",
-      social_media: "Redes Sociais",
-      website: "Website",
-      other: "Outra",
+      [SaleOrigin.DIRECT]: "Venda Direta",
+      [SaleOrigin.REFERENCE]: "Referência",
+      [SaleOrigin.SOCIAL_MEDIA]: "Redes Sociais",
+      [SaleOrigin.WEBSITE]: "Website",
+      [SaleOrigin.OTHER]: "Outra",
     };
     return labels[origin] || origin;
   };
