@@ -20,15 +20,15 @@ interface MaterialTableProps {
 
 const MaterialTable = ({ materials, onShowDetails }: MaterialTableProps) => {
   return (
-    <div className="border rounded-md">
+    <div className="border rounded-xl overflow-hidden animate-fade-in">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
+            <TableHead className="font-medium">ID</TableHead>
             <TableHead>
               <div className="flex items-center">
                 Tipo
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+                <ArrowUpDown className="ml-2 h-4 w-4 transition-transform hover:scale-125" />
               </div>
             </TableHead>
             <TableHead>Nome</TableHead>
@@ -41,18 +41,18 @@ const MaterialTable = ({ materials, onShowDetails }: MaterialTableProps) => {
         <TableBody>
           {materials.length > 0 ? (
             materials.map((material) => (
-              <TableRow key={material.id}>
+              <TableRow key={material.id} className="group transition-colors">
                 <TableCell className="font-medium">{material.id}</TableCell>
                 <TableCell>
                   <Badge
-                    variant="outline"
-                    className={
+                    variant={
                       material.type === "marble"
-                        ? "border-blue-500 text-blue-500"
+                        ? "info"
                         : material.type === "granite"
-                        ? "border-industrial-700 text-industrial-700"
-                        : "border-violet-500 text-violet-500"
+                        ? "secondary"
+                        : "success"
                     }
+                    className="transition-all duration-300 group-hover:shadow-sm"
                   >
                     {translateMaterialType(material.type)}
                   </Badge>
@@ -66,6 +66,7 @@ const MaterialTable = ({ materials, onShowDetails }: MaterialTableProps) => {
                     variant="ghost"
                     size="sm"
                     onClick={() => onShowDetails(material)}
+                    className="hover:bg-primary/10 hover:text-primary"
                   >
                     Detalhes
                   </Button>
@@ -74,7 +75,7 @@ const MaterialTable = ({ materials, onShowDetails }: MaterialTableProps) => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={7} className="text-center py-4">
+              <TableCell colSpan={7} className="text-center py-6">
                 Nenhum material encontrado. Tente ajustar os filtros.
               </TableCell>
             </TableRow>

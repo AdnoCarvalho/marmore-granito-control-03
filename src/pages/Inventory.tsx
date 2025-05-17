@@ -6,15 +6,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 const Inventory = () => {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-800 mb-2">Gerenciamento de Estoque</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-800 mb-2 font-heading">Gerenciamento de Estoque</h1>
           <p className="text-slate-500">
             Cadastre, visualize e gerencie todos os materiais disponíveis em seu estoque.
           </p>
         </div>
         
-        <Card className="shadow-card">
+        <Card className="shadow-card hover:shadow-card-hover transition-all duration-300">
           <CardHeader className="pb-3">
             <CardTitle>Materiais em Estoque</CardTitle>
             <CardDescription>

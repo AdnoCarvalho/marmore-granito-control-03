@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,7 +35,7 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 29 94% 58%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -91,20 +93,48 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
 }
 
 @layer components {
   .dashboard-card {
-    @apply bg-card rounded-lg border p-5 shadow-card transition-all hover:shadow-lg;
+    @apply bg-card rounded-lg border p-5 shadow-card transition-all duration-300 hover:shadow-card-hover;
   }
 
   .page-title {
-    @apply mb-6 text-2xl font-bold tracking-tight;
+    @apply mb-6 text-2xl font-bold tracking-tight font-heading;
   }
 
   .section-title {
-    @apply mb-4 text-xl font-semibold;
+    @apply mb-4 text-xl font-semibold font-heading;
+  }
+  
+  .status-badge {
+    @apply px-2 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .status-paid {
+    @apply bg-status-paid/10 text-status-paid;
+  }
+  
+  .status-pending {
+    @apply bg-status-pending/10 text-status-pending;
+  }
+  
+  .status-processing {
+    @apply bg-status-processing/10 text-status-processing;
+  }
+  
+  .status-cancelled {
+    @apply bg-status-cancelled/10 text-status-cancelled;
+  }
+  
+  .btn-hover-effect {
+    @apply transition-transform duration-300 ease-out hover:scale-105;
+  }
+  
+  .card-hover-effect {
+    @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
   }
 }
