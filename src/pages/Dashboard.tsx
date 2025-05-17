@@ -5,7 +5,7 @@ import DashboardOverview from '@/components/dashboard/DashboardOverview';
 const Dashboard = () => {
   return (
     <DashboardLayout>
-      <h1 className="page-title">Dashboard</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
       <DashboardOverview />
     </DashboardLayout>
   );

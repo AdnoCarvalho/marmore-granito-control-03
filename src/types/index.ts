@@ -15,12 +15,19 @@ export interface User {
 
 export enum MaterialType {
   MARBLE = "marble",
-  GRANITE = "granite"
+  GRANITE = "granite",
+  QUARTZITE = "quartzite" // Novo tipo: Quartzito
+}
+
+export enum MaterialSubtype {
+  SLAB = "slab", // Chapa
+  BLOCK = "block" // Bloco
 }
 
 export interface Material {
   id: string;
   type: MaterialType;
+  subtype?: MaterialSubtype; // Subtipo: Chapa ou Bloco
   name: string;
   serialNumber: string;
   dimensions: {
@@ -33,6 +40,8 @@ export interface Material {
   purchaseDate: Date;
   purchasePrice: number;
   supplier: string;
+  pricePerSquareMeter?: number; // Preço por m²
+  notes?: string; // Observações
 }
 
 export interface Client {
@@ -42,6 +51,7 @@ export interface Client {
   contactName: string;
   phone: string;
   email: string;
+  businessType?: string; // Tipo de empresa (marmoraria, depósito, etc)
   address: {
     street: string;
     number: string;
@@ -78,6 +88,7 @@ export interface Inventory {
   responsibleUser: string;
   clientId?: string;
   notes?: string;
+  reason?: string; // Motivo da movimentação
 }
 
 export interface StockSummary {

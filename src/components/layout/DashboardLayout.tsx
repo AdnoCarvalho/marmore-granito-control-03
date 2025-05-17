@@ -58,7 +58,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Navigation items with permission control
+  // Items de navegação com controle de permissão
   const navItems = [
     {
       to: "/dashboard",
@@ -69,24 +69,24 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     {
       to: "/inventory",
       icon: <Layers className="h-5 w-5" />,
-      label: "Inventory",
+      label: "Estoque",
       roles: [UserRole.OPERATOR, UserRole.MANAGER, UserRole.ADMIN],
     },
     {
       to: "/clients",
       icon: <Users className="h-5 w-5" />,
-      label: "Clients",
+      label: "Clientes",
       roles: [UserRole.MANAGER, UserRole.ADMIN],
     },
     {
       to: "/financial",
       icon: <Wallet className="h-5 w-5" />,
-      label: "Financial",
+      label: "Financeiro",
       roles: [UserRole.ADMIN],
     },
   ];
 
-  // Filter navigation items based on user role
+  // Filtra itens de navegação baseado na função do usuário
   const filteredNavItems = navItems.filter(item => 
     checkPermission(item.roles)
   );
@@ -97,14 +97,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Desktop Sidebar */}
+      {/* Sidebar Desktop */}
       <div className="hidden md:flex flex-col w-64 border-r bg-card">
         <div className="flex h-16 items-center border-b px-4">
           <Link to="/dashboard" className="flex items-center font-semibold text-lg">
             <div className="mr-2 h-8 w-8 bg-primary rounded-md flex items-center justify-center text-white">
-              M&G
+              PS
             </div>
-            <span>Marble & Granite</span>
+            <span>PoligiSystem</span>
           </Link>
         </div>
         <nav className="flex-1 overflow-auto py-4 px-2">
@@ -138,25 +138,26 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   </div>
                   <div className="flex flex-col text-left">
                     <span className="text-sm font-medium leading-none">{user?.name}</span>
-                    <span className="text-xs text-muted-foreground capitalize">{user?.role}</span>
+                    <span className="text-xs text-muted-foreground">{user?.role === UserRole.ADMIN ? "Administrador" : 
+                      user?.role === UserRole.MANAGER ? "Gerente" : "Operador"}</span>
                   </div>
                   <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
                 </div>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={logout}>
                 <LogOut className="mr-2 h-4 w-4" />
-                Log out
+                Sair
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
 
-      {/* Mobile Sidebar */}
+      {/* Sidebar Mobile */}
       <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
         <SheetContent side="left" className="w-64 p-0">
           <div className="flex h-16 items-center border-b px-4">
@@ -166,9 +167,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               onClick={closeMobileMenu}
             >
               <div className="mr-2 h-8 w-8 bg-primary rounded-md flex items-center justify-center text-white">
-                M&G
+                PS
               </div>
-              <span>Marble & Granite</span>
+              <span>PoligiSystem</span>
             </Link>
           </div>
           <nav className="flex-1 overflow-auto py-4 px-2">
@@ -189,13 +190,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <div className="p-4">
             <Button variant="ghost" className="w-full justify-start px-2" onClick={logout}>
               <LogOut className="mr-2 h-5 w-5" />
-              Log out
+              Sair
             </Button>
           </div>
         </SheetContent>
       </Sheet>
 
-      {/* Main Content */}
+      {/* Conteúdo Principal */}
       <div className="flex-1 flex flex-col">
         <header className="h-16 flex items-center border-b px-6">
           <div className="md:hidden">
@@ -229,13 +230,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   <DropdownMenuLabel>
                     <div className="flex flex-col">
                       <span>{user?.name}</span>
-                      <span className="text-xs text-muted-foreground capitalize">{user?.role}</span>
+                      <span className="text-xs text-muted-foreground">{user?.role === UserRole.ADMIN ? "Administrador" : 
+                        user?.role === UserRole.MANAGER ? "Gerente" : "Operador"}</span>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    Log out
+                    Sair
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

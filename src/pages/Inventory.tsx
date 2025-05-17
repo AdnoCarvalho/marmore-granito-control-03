@@ -5,7 +5,7 @@ import InventoryList from '@/components/inventory/InventoryList';
 const Inventory = () => {
   return (
     <DashboardLayout>
-      <h1 className="page-title">Inventory Management</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Gerenciamento de Estoque</h1>
       <InventoryList />
     </DashboardLayout>
   );

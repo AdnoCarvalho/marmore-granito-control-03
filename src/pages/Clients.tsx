@@ -5,7 +5,7 @@ import ClientList from '@/components/clients/ClientList';
 const Clients = () => {
   return (
     <DashboardLayout>
-      <h1 className="page-title">Client Management</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Gerenciamento de Clientes</h1>
       <ClientList />
     </DashboardLayout>
   );

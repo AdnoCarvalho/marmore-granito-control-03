@@ -2,7 +2,7 @@
 import { Navigate } from 'react-router-dom';
 
 const Index = () => {
-  // Bypass login and redirect directly to dashboard
+  // Bypass login e redireciona diretamente para o dashboard
   return <Navigate to="/dashboard" replace />;
 };
 
