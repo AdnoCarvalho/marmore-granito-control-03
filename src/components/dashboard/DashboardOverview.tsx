@@ -44,22 +44,22 @@ const DashboardOverview = () => {
   // Data for Charts
   const stockData = [
     {
-      name: "Marble",
+      name: "Mármore",
       quantity: mockStockSummary.find(summary => summary.materialType === MaterialType.MARBLE)?.totalQuantity || 0,
     },
     {
-      name: "Granite",
+      name: "Granito",
       quantity: mockStockSummary.find(summary => summary.materialType === MaterialType.GRANITE)?.totalQuantity || 0,
     },
   ];
 
   const salesData = [
     {
-      name: "Marble",
+      name: "Mármore",
       value: mockSalesSummary.find(summary => summary.materialType === MaterialType.MARBLE)?.totalSales || 0,
     },
     {
-      name: "Granite",
+      name: "Granito",
       value: mockSalesSummary.find(summary => summary.materialType === MaterialType.GRANITE)?.totalSales || 0,
     },
   ];
@@ -67,10 +67,10 @@ const DashboardOverview = () => {
   // Monthly income data - mock data for visualization
   const monthlyData = [
     { name: "Jan", value: 1200 },
-    { name: "Feb", value: 1900 },
+    { name: "Fev", value: 1900 },
     { name: "Mar", value: 3000 },
-    { name: "Apr", value: 5200 },
-    { name: "May", value: 3100 },
+    { name: "Abr", value: 5200 },
+    { name: "Mai", value: 3100 },
     { name: "Jun", value: 2800 },
   ];
 
@@ -81,57 +81,57 @@ const DashboardOverview = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Stock</CardTitle>
+            <CardTitle className="text-sm font-medium">Estoque Total</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalStockMaterials} units</div>
+            <div className="text-2xl font-bold">{totalStockMaterials} unidades</div>
             <p className="text-xs text-muted-foreground">
-              Combined marble and granite pieces
+              Total de peças em mármore e granito
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Clients</CardTitle>
+            <CardTitle className="text-sm font-medium">Total de Clientes</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalClients}</div>
-            <p className="text-xs text-muted-foreground">Business clients</p>
+            <p className="text-xs text-muted-foreground">Clientes corporativos</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Income</CardTitle>
+            <CardTitle className="text-sm font-medium">Receita Total</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">R$ {totalIncome.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">From completed sales</p>
+            <p className="text-xs text-muted-foreground">De vendas concluídas</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Profit</CardTitle>
+            <CardTitle className="text-sm font-medium">Lucro</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               R$ {profit.toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">Income - Expenses</p>
+            <p className="text-xs text-muted-foreground">Receitas - Despesas</p>
           </CardContent>
         </Card>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="stock">Stock</TabsTrigger>
-          <TabsTrigger value="sales">Sales</TabsTrigger>
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="stock">Estoque</TabsTrigger>
+          <TabsTrigger value="sales">Vendas</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <Card className="col-span-1">
               <CardHeader>
-                <CardTitle>Monthly Income</CardTitle>
+                <CardTitle>Receita Mensal</CardTitle>
               </CardHeader>
               <CardContent className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
@@ -155,7 +155,7 @@ const DashboardOverview = () => {
             </Card>
             <Card className="col-span-1">
               <CardHeader>
-                <CardTitle>Sales Distribution</CardTitle>
+                <CardTitle>Distribuição de Vendas</CardTitle>
               </CardHeader>
               <CardContent className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
@@ -184,7 +184,7 @@ const DashboardOverview = () => {
         <TabsContent value="stock" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Current Stock Level</CardTitle>
+              <CardTitle>Nível de Estoque Atual</CardTitle>
             </CardHeader>
             <CardContent className="h-96">
               <ResponsiveContainer width="100%" height="100%">
@@ -211,7 +211,7 @@ const DashboardOverview = () => {
         <TabsContent value="sales" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Sales by Material Type</CardTitle>
+              <CardTitle>Vendas por Tipo de Material</CardTitle>
             </CardHeader>
             <CardContent className="h-96">
               <ResponsiveContainer width="100%" height="100%">
