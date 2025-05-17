@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { PlusCircle, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
+import { PlusCircle, ArrowUpCircle, ArrowDownCircle, Calendar, DollarSign } from "lucide-react";
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import FinancialSummary from '@/components/financial/FinancialSummary';
 import TransactionForms from '@/components/financial/TransactionForms';
@@ -25,38 +25,38 @@ const Financial = () => {
             </p>
           </div>
           
-          <div className="flex gap-3 mt-2 md:mt-0">
+          <div className="flex flex-col sm:flex-row gap-3 mt-2 md:mt-0 w-full sm:w-auto">
             <Button 
               onClick={() => setIncomeModalOpen(true)}
-              className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-none"
+              className="bg-[#28a745] hover:bg-[#218838] text-white flex-1 sm:flex-none py-6 sm:py-2 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]"
             >
-              <PlusCircle className="mr-2 h-4 w-4" />
+              <DollarSign className="mr-2 h-4 w-4" />
               Nova Receita
             </Button>
             <Button 
               onClick={() => setExpenseModalOpen(true)}
-              className="bg-red-600 hover:bg-red-700 text-white flex-1 md:flex-none"
+              className="bg-[#dc3545] hover:bg-[#c82333] text-white flex-1 sm:flex-none py-6 sm:py-2 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px]"
             >
-              <PlusCircle className="mr-2 h-4 w-4" />
+              <DollarSign className="mr-2 h-4 w-4" />
               Nova Despesa
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="border-l-4 border-l-green-500 bg-green-50">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <Card className="border-l-4 border-l-[#28a745] bg-green-50 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
             <CardContent className="p-6">
               <div className="flex items-center mb-4">
-                <ArrowUpCircle className="h-8 w-8 text-green-600 mr-3" />
+                <ArrowUpCircle className="h-8 w-8 text-[#28a745] mr-3" />
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-800">Receitas</h3>
+                  <h3 className="text-lg font-semibold text-slate-800 font-heading">Receitas</h3>
                   <p className="text-sm text-slate-500">Entradas financeiras</p>
                 </div>
               </div>
               <Button 
                 onClick={() => setIncomeModalOpen(true)}
                 variant="outline" 
-                className="w-full border-green-200 text-green-700 hover:bg-green-100"
+                className="w-full border-green-200 text-[#28a745] hover:bg-green-100 rounded-lg py-5 sm:py-2 flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Adicionar Receita
@@ -64,19 +64,19 @@ const Financial = () => {
             </CardContent>
           </Card>
           
-          <Card className="border-l-4 border-l-red-500 bg-red-50">
+          <Card className="border-l-4 border-l-[#dc3545] bg-red-50 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
             <CardContent className="p-6">
               <div className="flex items-center mb-4">
-                <ArrowDownCircle className="h-8 w-8 text-red-600 mr-3" />
+                <ArrowDownCircle className="h-8 w-8 text-[#dc3545] mr-3" />
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-800">Despesas</h3>
+                  <h3 className="text-lg font-semibold text-slate-800 font-heading">Despesas</h3>
                   <p className="text-sm text-slate-500">Saídas financeiras</p>
                 </div>
               </div>
               <Button 
                 onClick={() => setExpenseModalOpen(true)}
                 variant="outline" 
-                className="w-full border-red-200 text-red-700 hover:bg-red-100"
+                className="w-full border-red-200 text-[#dc3545] hover:bg-red-100 rounded-lg py-5 sm:py-2 flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Adicionar Despesa
@@ -85,25 +85,31 @@ const Financial = () => {
           </Card>
         </div>
 
-        <Tabs defaultValue="resumo" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3 md:w-auto md:inline-flex">
-            <TabsTrigger value="resumo">Resumo</TabsTrigger>
-            <TabsTrigger value="movimentacoes">Movimentações</TabsTrigger>
-            <TabsTrigger value="cadastro">Formulários</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="resumo" className="space-y-4 animate-fade-in">
-            <FinancialSummary />
-          </TabsContent>
-          
-          <TabsContent value="movimentacoes" className="space-y-4 animate-fade-in">
-            <FinancialSummary showTransactionsOnly={true} />
-          </TabsContent>
-          
-          <TabsContent value="cadastro" className="space-y-4 animate-fade-in">
-            <TransactionForms />
-          </TabsContent>
-        </Tabs>
+        <Card className="rounded-lg shadow-md">
+          <CardContent className="p-0">
+            <Tabs defaultValue="resumo" className="w-full">
+              <div className="px-4 pt-4">
+                <TabsList className="grid w-full grid-cols-3 md:w-auto md:inline-flex rounded-lg">
+                  <TabsTrigger value="resumo" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-white">Resumo</TabsTrigger>
+                  <TabsTrigger value="movimentacoes" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-white">Movimentações</TabsTrigger>
+                  <TabsTrigger value="cadastro" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-white">Formulários</TabsTrigger>
+                </TabsList>
+              </div>
+              
+              <TabsContent value="resumo" className="space-y-4 animate-fade-in p-4">
+                <FinancialSummary />
+              </TabsContent>
+              
+              <TabsContent value="movimentacoes" className="space-y-4 animate-fade-in p-4">
+                <FinancialSummary showTransactionsOnly={true} />
+              </TabsContent>
+              
+              <TabsContent value="cadastro" className="space-y-4 animate-fade-in p-4">
+                <TransactionForms />
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
 
         {/* Income Modal */}
         <IncomeFormModal open={incomeModalOpen} onOpenChange={setIncomeModalOpen} />
