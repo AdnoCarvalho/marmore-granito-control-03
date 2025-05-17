@@ -27,16 +27,21 @@ import {
 } from "recharts";
 import { Wallet, TrendingUp, TrendingDown, CalendarIcon } from "lucide-react";
 import { format, subMonths, isWithinInterval, startOfMonth, endOfMonth } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-const FinancialSummary = () => {
+interface FinancialSummaryProps {
+  showTransactionsOnly?: boolean;
+}
+
+const FinancialSummary = ({ showTransactionsOnly = false }: FinancialSummaryProps) => {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
 
-  // Calculate date range for filtering
+  // Calcular intervalo de datas para filtrar
   const startDate = startOfMonth(selectedMonth);
   const endDate = endOfMonth(selectedMonth);
 
-  // Filter transactions for the selected month
+  // Filtrar transações do mês selecionado
   const filteredTransactions = mockTransactions.filter((transaction) =>
     isWithinInterval(new Date(transaction.date), {
       start: startDate,
@@ -44,7 +49,7 @@ const FinancialSummary = () => {
     })
   );
 
-  // Calculate summary for the selected month
+  // Calcular resumo para o mês selecionado
   const totalIncome = filteredTransactions
     .filter(
       (transaction) =>
@@ -67,7 +72,7 @@ const FinancialSummary = () => {
 
   const balance = totalIncome - totalExpenses;
 
-  // Generate chart data - last 6 months
+  // Gerar dados do gráfico - últimos 6 meses
   const generateChartData = () => {
     const data = [];
     const currentDate = new Date();
@@ -102,10 +107,10 @@ const FinancialSummary = () => {
         .reduce((acc, transaction) => acc + transaction.amount, 0);
 
       data.push({
-        name: format(month, "MMM"),
-        income: monthlyIncome,
-        expense: monthlyExpense,
-        balance: monthlyIncome - monthlyExpense,
+        name: format(month, "MMM", { locale: ptBR }),
+        receitas: monthlyIncome,
+        despesas: monthlyExpense,
+        saldo: monthlyIncome - monthlyExpense,
       });
     }
 
@@ -114,42 +119,167 @@ const FinancialSummary = () => {
 
   const chartData = generateChartData();
 
-  // Function to determine the badge color based on transaction type
+  // Determina a cor do badge baseado no tipo de transação
   const getTransactionBadge = (transaction: Transaction) => {
     if (transaction.status === "pending") {
       return (
-        <Badge variant="outline" className="border-yellow-500 text-yellow-500">
-          Pending
-        </Badge>
+        <Badge variant="warning">Pendente</Badge>
       );
     }
     
     if (transaction.type === TransactionType.INCOME) {
       return (
-        <Badge variant="outline" className="border-green-500 text-green-500">
-          Income
-        </Badge>
+        <Badge variant="success">Receita</Badge>
       );
     } else {
       return (
-        <Badge variant="outline" className="border-red-500 text-red-500">
-          Expense
-        </Badge>
+        <Badge variant="danger">Despesa</Badge>
       );
     }
   };
 
+  if (showTransactionsOnly) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold">Movimentações Financeiras</h2>
+          <div className="relative">
+            <Button
+              variant="outline"
+              onClick={() => setShowCalendar(!showCalendar)}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {format(selectedMonth, "MMMM yyyy", { locale: ptBR })}
+            </Button>
+            
+            {showCalendar && (
+              <div className="absolute right-0 mt-1 bg-card shadow-lg rounded-lg z-10 border">
+                <Calendar
+                  mode="single"
+                  selected={selectedMonth}
+                  onSelect={(date) => {
+                    if (date) {
+                      setSelectedMonth(date);
+                      setShowCalendar(false);
+                    }
+                  }}
+                  locale={ptBR}
+                  initialFocus
+                  className="pointer-events-auto"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Data</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead>Categoria</TableHead>
+                  <TableHead className="text-right">Valor</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredTransactions.length > 0 ? (
+                  filteredTransactions.map((transaction) => (
+                    <TableRow key={transaction.id} className="hover:bg-accent/5 transition-colors">
+                      <TableCell>
+                        {format(new Date(transaction.date), "dd/MM/yyyy")}
+                      </TableCell>
+                      <TableCell>{getTransactionBadge(transaction)}</TableCell>
+                      <TableCell className="font-medium">
+                        {transaction.description}
+                      </TableCell>
+                      <TableCell>{transaction.category}</TableCell>
+                      <TableCell className={`text-right ${
+                        transaction.type === TransactionType.INCOME
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}>
+                        R$ {transaction.amount.toLocaleString()}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-4">
+                      Nenhuma transação encontrada para este mês.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl">Pendentes</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Data</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead className="text-right">Valor</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredTransactions.filter(t => t.status === "pending").length > 0 ? (
+                  filteredTransactions
+                    .filter((t) => t.status === "pending")
+                    .map((transaction) => (
+                      <TableRow key={transaction.id} className="hover:bg-accent/5 transition-colors">
+                        <TableCell>
+                          {format(new Date(transaction.date), "dd/MM/yyyy")}
+                        </TableCell>
+                        <TableCell>
+                          {transaction.type === TransactionType.INCOME
+                            ? "Receita"
+                            : "Despesa"}
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {transaction.description}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          R$ {transaction.amount.toLocaleString()}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center py-4">
+                      Nenhuma transação pendente para este mês.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Financial Summary</h2>
+        <h2 className="text-xl font-semibold">Resumo Financeiro</h2>
         <div className="relative">
           <Button
             variant="outline"
             onClick={() => setShowCalendar(!showCalendar)}
+            className="hover-scale"
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {format(selectedMonth, "MMMM yyyy")}
+            {format(selectedMonth, "MMMM yyyy", { locale: ptBR })}
           </Button>
           
           {showCalendar && (
@@ -163,6 +293,7 @@ const FinancialSummary = () => {
                     setShowCalendar(false);
                   }
                 }}
+                locale={ptBR}
                 initialFocus
                 className="pointer-events-auto"
               />
@@ -172,12 +303,12 @@ const FinancialSummary = () => {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
+        <Card className="hover:shadow-card-hover transition-all duration-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               <div className="flex items-center">
                 <TrendingUp className="mr-2 h-4 w-4 text-green-500" />
-                Income
+                Receitas
               </div>
             </CardTitle>
           </CardHeader>
@@ -186,17 +317,17 @@ const FinancialSummary = () => {
               R$ {totalIncome.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
-              For {format(selectedMonth, "MMMM yyyy")}
+              {format(selectedMonth, "MMMM yyyy", { locale: ptBR })}
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="hover:shadow-card-hover transition-all duration-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               <div className="flex items-center">
                 <TrendingDown className="mr-2 h-4 w-4 text-red-500" />
-                Expenses
+                Despesas
               </div>
             </CardTitle>
           </CardHeader>
@@ -205,17 +336,17 @@ const FinancialSummary = () => {
               R$ {totalExpenses.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
-              For {format(selectedMonth, "MMMM yyyy")}
+              {format(selectedMonth, "MMMM yyyy", { locale: ptBR })}
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="hover:shadow-card-hover transition-all duration-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               <div className="flex items-center">
                 <Wallet className="mr-2 h-4 w-4" />
-                Balance
+                Saldo
               </div>
             </CardTitle>
           </CardHeader>
@@ -224,150 +355,97 @@ const FinancialSummary = () => {
               R$ {balance.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
-              Income - Expenses
+              Receitas - Despesas
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="transactions">Transactions</TabsTrigger>
-          <TabsTrigger value="pending">Pending ({filteredTransactions.filter(t => t.status === "pending").length})</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="overview" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Financial Performance</CardTitle>
-            </CardHeader>
-            <CardContent className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString()}`} />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="income"
-                    stroke="#10B981"
-                    strokeWidth={2}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="expense"
-                    stroke="#EF4444"
-                    strokeWidth={2}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="balance"
-                    stroke="#0EA5E9"
-                    strokeWidth={2}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="transactions" className="space-y-4">
-          <Card>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredTransactions.length > 0 ? (
-                    filteredTransactions.map((transaction) => (
-                      <TableRow key={transaction.id}>
-                        <TableCell>
-                          {format(new Date(transaction.date), "dd/MM/yyyy")}
-                        </TableCell>
-                        <TableCell>{getTransactionBadge(transaction)}</TableCell>
-                        <TableCell className="font-medium">
-                          {transaction.description}
-                        </TableCell>
-                        <TableCell>{transaction.category}</TableCell>
-                        <TableCell className={`text-right ${
-                          transaction.type === TransactionType.INCOME
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}>
-                          R$ {transaction.amount.toLocaleString()}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center py-4">
-                        No transactions found for this month.
+      <Card className="hover:shadow-card-hover transition-all duration-200">
+        <CardHeader>
+          <CardTitle>Desempenho Financeiro</CardTitle>
+        </CardHeader>
+        <CardContent className="h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString()}`} />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="receitas"
+                name="Receitas"
+                stroke="#10B981"
+                strokeWidth={2}
+              />
+              <Line
+                type="monotone"
+                dataKey="despesas"
+                name="Despesas"
+                stroke="#EF4444"
+                strokeWidth={2}
+              />
+              <Line
+                type="monotone"
+                dataKey="saldo"
+                name="Saldo"
+                stroke="#0EA5E9"
+                strokeWidth={2}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      <Card className="hover:shadow-card-hover transition-all duration-200">
+        <CardHeader>
+          <CardTitle>Transações Recentes</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Data</TableHead>
+                <TableHead>Tipo</TableHead>
+                <TableHead>Descrição</TableHead>
+                <TableHead className="text-right">Valor</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredTransactions.slice(0, 5).length > 0 ? (
+                filteredTransactions
+                  .slice(0, 5)
+                  .map((transaction) => (
+                    <TableRow key={transaction.id} className="hover:bg-accent/5 transition-colors">
+                      <TableCell>
+                        {format(new Date(transaction.date), "dd/MM/yyyy")}
+                      </TableCell>
+                      <TableCell>{getTransactionBadge(transaction)}</TableCell>
+                      <TableCell className="font-medium">
+                        {transaction.description}
+                      </TableCell>
+                      <TableCell className={`text-right ${
+                        transaction.type === TransactionType.INCOME
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}>
+                        R$ {transaction.amount.toLocaleString()}
                       </TableCell>
                     </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="pending" className="space-y-4">
-          <Card>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredTransactions.filter(t => t.status === "pending").length > 0 ? (
-                    filteredTransactions
-                      .filter((t) => t.status === "pending")
-                      .map((transaction) => (
-                        <TableRow key={transaction.id}>
-                          <TableCell>
-                            {format(new Date(transaction.date), "dd/MM/yyyy")}
-                          </TableCell>
-                          <TableCell>
-                            {transaction.type === TransactionType.INCOME
-                              ? "Income"
-                              : "Expense"}
-                          </TableCell>
-                          <TableCell className="font-medium">
-                            {transaction.description}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            R$ {transaction.amount.toLocaleString()}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={4} className="text-center py-4">
-                        No pending transactions for this month.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                  ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center py-4">
+                    Nenhuma transação encontrada para este mês.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 };
