@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Inventory from "./pages/Inventory";
 import Clients from "./pages/Clients";
+import ClientDetails from "./pages/ClientDetails";
 import Financial from "./pages/Financial";
 import Sales from "./pages/Sales";
 import NotFound from "./pages/NotFound";
@@ -22,6 +23,7 @@ const AppRoutes = () => {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/inventory" element={<Inventory />} />
       <Route path="/clients" element={<Clients />} />
+      <Route path="/clients/:id" element={<ClientDetails />} />
       <Route path="/financial" element={<Financial />} />
       <Route path="/sales" element={<Sales />} />
       <Route path="*" element={<NotFound />} />

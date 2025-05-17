@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Search, Plus } from "lucide-react";
+import { Search, Plus, ExternalLink } from "lucide-react";
 import { mockClients } from "@/utils/mockData";
 import { Client, UserRole } from "@/types";
 
@@ -97,13 +98,24 @@ const ClientList = () => {
                   <TableCell>{client.email}</TableCell>
                   <TableCell>{client.phone}</TableCell>
                   <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleShowDetails(client)}
-                    >
-                      Details
-                    </Button>
+                    <div className="flex space-x-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleShowDetails(client)}
+                      >
+                        Details
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        asChild
+                      >
+                        <Link to={`/clients/${client.id}`}>
+                          <ExternalLink className="mr-1 h-4 w-4" /> Ver Perfil
+                        </Link>
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
@@ -196,13 +208,20 @@ const ClientList = () => {
                   </div>
                 </div>
                 
-                <div className="flex justify-end gap-2 pt-2">
+                <div className="flex justify-between gap-2 pt-2">
+                  <Button 
+                    variant="outline" 
+                    asChild 
+                    className="flex items-center"
+                  >
+                    <Link to={`/clients/${selectedClient.id}`}>
+                      <ExternalLink className="mr-2 h-4 w-4" /> Ver Perfil Completo
+                    </Link>
+                  </Button>
+                  
                   <Button variant="outline" onClick={() => setShowDialog(false)}>
                     Close
                   </Button>
-                  {canAddClient && (
-                    <Button variant="outline">Edit</Button>
-                  )}
                 </div>
               </div>
             )
