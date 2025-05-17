@@ -102,3 +102,24 @@ export interface SalesSummary {
   totalSales: number;
   percentageOfTotal: number;
 }
+
+// Nova interface para vendas
+export enum SaleOrigin {
+  DIRECT = "direct", // Venda direta
+  REFERENCE = "reference", // Referência
+  SOCIAL_MEDIA = "social_media", // Redes sociais
+  WEBSITE = "website", // Website
+  OTHER = "other" // Outros
+}
+
+export interface Sale {
+  id: string;
+  clientId: string;
+  date: Date;
+  materialId: string;
+  quantity: number;
+  sellerId: string;
+  origin: SaleOrigin;
+  totalValue: number;
+  status: "paid" | "pending" | "cancelled";
+}
