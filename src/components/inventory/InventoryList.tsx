@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 import { mockMaterials } from "@/utils/mockData";
 import { Material } from "@/types";
 import MaterialFilterBar from "./MaterialFilterBar";
@@ -60,15 +61,10 @@ const InventoryList = () => {
           <AddMaterialDialog onClose={handleCloseDialog} />
         ) : (
           selectedMaterial && (
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Detalhes do Material</DialogTitle>
-              </DialogHeader>
-              <MaterialDetails 
-                material={selectedMaterial} 
-                onClose={handleCloseDialog} 
-              />
-            </DialogContent>
+            <MaterialDetails 
+              material={selectedMaterial} 
+              onClose={handleCloseDialog} 
+            />
           )
         )}
       </Dialog>
