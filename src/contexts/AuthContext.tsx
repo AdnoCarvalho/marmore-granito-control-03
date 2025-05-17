@@ -28,10 +28,10 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  // Set default user as admin for development
+  const defaultAdminUser = mockUsers.find(user => user.role === UserRole.ADMIN) || mockUsers[0];
+  
+  const [user, setUser] = useState<User | null>(defaultAdminUser);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -68,13 +68,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    navigate("/");
+    // For development, don't actually log out
     toast({
-      title: "Logged out successfully",
-      description: "You have been logged out of your account.",
+      title: "Logout disabled",
+      description: "Logout is disabled during development.",
     });
+    // Don't navigate away or clear user
   };
 
   const checkPermission = (allowedRoles: UserRole[]) => {
@@ -86,7 +85,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     user,
     login,
     logout,
-    isAuthenticated: !!user,
+    isAuthenticated: true, // Always return true to bypass authentication checks
     checkPermission,
   };
 
