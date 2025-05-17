@@ -64,7 +64,7 @@ const SalesDashboard = () => {
           <div>
             <p className="text-sm font-medium text-muted-foreground">Último Cliente Atendido</p>
             <h3 className="text-xl font-bold mt-1 truncate">
-              {lastClient ? lastClient.companyName : "Nenhum cliente registrado"}
+              {lastClient ? lastClient.name : "Nenhum cliente registrado"}
             </h3>
             <p className="text-sm text-muted-foreground mt-1">
               {lastSale ? new Intl.DateTimeFormat('pt-BR').format(new Date(lastSale.date)) : ""}
