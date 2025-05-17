@@ -1,14 +1,33 @@
 
-import React from "react";
+import React, { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PurchaseDashboard from "@/components/purchases/PurchaseDashboard";
 import PurchaseForm from "@/components/purchases/PurchaseForm";
 import PurchaseList from "@/components/purchases/PurchaseList";
+import { PurchaseFormValues } from "@/types/purchase";
 
 const PurchaseCreate = () => {
+  const navigate = useNavigate();
+
+  // Handle submission of the purchase form
+  const handleSubmit = useCallback((data: PurchaseFormValues) => {
+    toast("Compra registrada", {
+      description: "A compra foi registrada com sucesso e o estoque foi atualizado.",
+    });
+    
+    // After submission, navigate back to the purchases page
+    navigate("/purchases");
+  }, [navigate]);
+
+  // Handle cancellation of the purchase form
+  const handleCancel = useCallback(() => {
+    navigate("/purchases");
+  }, [navigate]);
+
   return (
     <DashboardLayout>
       <div className="space-y-6 animate-fade-in">
@@ -21,7 +40,7 @@ const PurchaseCreate = () => {
         
         <PurchaseDashboard />
         
-        <Tabs defaultValue="historico" className="space-y-4">
+        <Tabs defaultValue="nova" className="space-y-4">
           <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-flex">
             <TabsTrigger value="nova">Nova Compra</TabsTrigger>
             <TabsTrigger value="historico">Histórico</TabsTrigger>
@@ -36,7 +55,10 @@ const PurchaseCreate = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <PurchaseForm />
+                <PurchaseForm 
+                  onSubmit={handleSubmit}
+                  onCancel={handleCancel}
+                />
               </CardContent>
             </Card>
           </TabsContent>
