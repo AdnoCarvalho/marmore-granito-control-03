@@ -4,7 +4,7 @@ import { MaterialType, MaterialSubtype } from "@/types";
 export interface MaterialInfo {
   name: string;
   type: MaterialType;
-  subtype: MaterialSubtype;
+  subtype?: MaterialSubtype; // Made optional with ?
 }
 
 export const getMaterial = (
@@ -48,5 +48,5 @@ export const getMaterialSubtype = (
     [MaterialSubtype.SLAB]: "Chapa",
     [MaterialSubtype.BLOCK]: "Bloco"
   };
-  return subtypes[material.subtype || MaterialSubtype.SLAB] || "Não especificado";
+  return material.subtype ? (subtypes[material.subtype] || "Não especificado") : "Não especificado";
 };

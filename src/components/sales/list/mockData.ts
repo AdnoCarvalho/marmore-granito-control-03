@@ -1,5 +1,5 @@
 
-import { Sale, SaleOrigin } from "@/types";
+import { Sale, SaleOrigin, MaterialType, MaterialSubtype } from "@/types";
 
 // Mock data for sales, clients, materials, and sellers
 export const mockSales: Sale[] = [
@@ -59,20 +59,20 @@ export const mockMaterials = [
   { 
     id: "1", 
     name: "Mármore Branco Carrara", 
-    type: "marble",
-    subtype: "slab"
+    type: MaterialType.MARBLE,
+    subtype: MaterialSubtype.SLAB
   },
   { 
     id: "2", 
     name: "Granito Preto São Gabriel", 
-    type: "granite",
-    subtype: "block" 
+    type: MaterialType.GRANITE,
+    subtype: MaterialSubtype.BLOCK 
   },
   { 
     id: "3", 
     name: "Quartzito Taj Mahal", 
-    type: "quartzite",
-    subtype: "slab" 
+    type: MaterialType.QUARTZITE,
+    subtype: MaterialSubtype.SLAB 
   },
 ];
 
