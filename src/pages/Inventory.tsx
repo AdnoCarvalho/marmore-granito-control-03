@@ -8,13 +8,13 @@ const Inventory = () => {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight mb-2">Gerenciamento de Estoque</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-800 mb-2">Gerenciamento de Estoque</h1>
+          <p className="text-slate-500">
             Cadastre, visualize e gerencie todos os materiais disponíveis em seu estoque.
           </p>
         </div>
         
-        <Card>
+        <Card className="shadow-card">
           <CardHeader className="pb-3">
             <CardTitle>Materiais em Estoque</CardTitle>
             <CardDescription>
