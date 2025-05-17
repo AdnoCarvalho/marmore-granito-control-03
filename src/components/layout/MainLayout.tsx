@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link, useLocation } from "react-router-dom";
@@ -292,6 +293,8 @@ const MainLayoutContent = ({ children }: MainLayoutProps) => {
 };
 
 const MainLayout = ({ children }: MainLayoutProps) => {
+  // The key change is here - we need to wrap the children with SidebarProvider
+  // before passing them to MainLayoutContent
   return (
     <SidebarProvider defaultOpen={false}>
       <MainLayoutContent>{children}</MainLayoutContent>
