@@ -102,10 +102,10 @@ const SalesChart = () => {
         <CardContent>
           <div className="h-80">
             {monthlySalesData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="99%" height="100%">
                 <BarChart
                   data={monthlySalesData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  margin={{ top: 20, right: 10, left: 0, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                   <XAxis 
@@ -119,6 +119,7 @@ const SalesChart = () => {
                     tickLine={false} 
                     tick={{ fill: '#6b7280' }}
                     tickFormatter={value => `R$ ${value/1000}k`}
+                    width={60}
                   />
                   <Tooltip 
                     formatter={(value, name) => [
@@ -134,6 +135,7 @@ const SalesChart = () => {
                       value === 'marble' ? 'Mármore' : 
                       value === 'granite' ? 'Granito' : 'Quartzito'
                     )}
+                    wrapperStyle={{ paddingTop: 10 }}
                   />
                   <Bar 
                     dataKey="marble" 
@@ -169,8 +171,8 @@ const SalesChart = () => {
           </CardHeader>
           <CardContent>
             <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+              <ResponsiveContainer width="99%" height="100%">
+                <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                   <Pie
                     data={materialSalesData}
                     cx="50%"
@@ -200,10 +202,10 @@ const SalesChart = () => {
           </CardHeader>
           <CardContent>
             <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="99%" height="100%">
                 <AreaChart
                   data={dailySalesData}
-                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                  margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
                   <XAxis 
@@ -217,6 +219,7 @@ const SalesChart = () => {
                     tickLine={false} 
                     tick={{ fill: '#6b7280' }}
                     tickFormatter={value => `R$ ${value/1000}k`}
+                    width={60}
                   />
                   <Tooltip 
                     formatter={value => formatCurrency(value)}
