@@ -1,319 +1,184 @@
-
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
+import { useRouter } from 'next/router';
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
   TableCell,
+  TableCaption,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Badge } from "@/components/ui/badge";
-import { Client, Sale } from "@/types";
+} from "@/components/ui/table"
 import { mockClients } from "@/utils/mockData";
-
-// Import mockSales from SalesList.tsx or create a shared mock data file
-const mockSales: Sale[] = [
-  {
-    id: "1",
-    clientId: "1",
-    date: new Date("2025-05-10"),
-    materialId: "1",
-    quantity: 3,
-    sellerId: "2",
-    origin: "direct" as any,
-    totalValue: 4500,
-    status: "paid",
-  },
-  {
-    id: "2",
-    clientId: "2",
-    date: new Date("2025-05-12"),
-    materialId: "2",
-    quantity: 2,
-    sellerId: "1",
-    origin: "reference" as any,
-    totalValue: 2400,
-    status: "pending",
-  },
-  {
-    id: "3",
-    clientId: "3",
-    date: new Date("2025-05-14"),
-    materialId: "3",
-    quantity: 1,
-    sellerId: "3",
-    origin: "website" as any,
-    totalValue: 2200,
-    status: "paid",
-  },
-  {
-    id: "4",
-    clientId: "1",
-    date: new Date("2025-05-16"),
-    materialId: "2",
-    quantity: 5,
-    sellerId: "2",
-    origin: "social_media" as any,
-    totalValue: 6000,
-    status: "cancelled",
-  },
-  {
-    id: "5",
-    clientId: "1",
-    date: new Date("2025-05-20"),
-    materialId: "3",
-    quantity: 2,
-    sellerId: "1",
-    origin: "direct" as any,
-    totalValue: 4400,
-    status: "paid",
-  },
-];
-
-const mockMaterials = [
-  { id: "1", name: "Mármore Branco Carrara" },
-  { id: "2", name: "Granito Preto São Gabriel" },
-  { id: "3", name: "Quartzito Taj Mahal" },
-];
+import { Sale, SaleOrigin, NCMCode } from "@/types";
 
 const ClientDetails = () => {
-  const { id } = useParams<{ id: string }>();
-  const [client, setClient] = useState<Client | null>(null);
-  const [clientSales, setClientSales] = useState<Sale[]>([]);
-  const [totalPurchased, setTotalPurchased] = useState(0);
+  const router = useRouter();
+  const { clientId } = router.query;
 
-  useEffect(() => {
-    // Encontrar o cliente pelo ID
-    const foundClient = mockClients.find((c) => c.id === id);
-    if (foundClient) {
-      setClient(foundClient);
-    }
-
-    // Filtrar compras do cliente pelo ID
-    const sales = mockSales.filter((sale) => sale.clientId === id);
-    setClientSales(sales);
-
-    // Calcular total comprado
-    const total = sales.reduce((acc, sale) => acc + sale.totalValue, 0);
-    setTotalPurchased(total);
-  }, [id]);
-
-  const getMaterialName = (materialId: string) => {
-    const material = mockMaterials.find((m) => m.id === materialId);
-    return material ? material.name : "Material não encontrado";
-  };
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "paid":
-        return <Badge variant="outline" className="bg-status-paid/10 text-status-paid border-status-paid/20">Pago</Badge>;
-      case "pending":
-        return <Badge variant="outline" className="bg-status-pending/10 text-status-pending border-status-pending/20">Pendente</Badge>;
-      case "cancelled":
-        return <Badge variant="outline" className="bg-status-cancelled/10 text-status-cancelled border-status-cancelled/20">Cancelado</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
-  };
+  // Find the client based on the clientId from the route
+  const client = mockClients.find(c => c.id === clientId);
 
   if (!client) {
     return (
       <DashboardLayout>
-        <div>Cliente não encontrado</div>
+        <div>Client not found</div>
       </DashboardLayout>
     );
   }
 
+  // Mock sales data for the client
+  const mockClientSales: Sale[] = [
+    {
+      id: "1",
+      clientId: clientId as string,
+      date: new Date("2023-06-15"),
+      materialId: "1",
+      quantity: 3,
+      sellerId: "1",
+      origin: SaleOrigin.DIRECT,
+      totalValue: 4500,
+      status: "paid",
+      ncmCode: NCMCode.MARBLE_PROCESSED
+    },
+    {
+      id: "2",
+      clientId: clientId as string,
+      date: new Date("2023-07-20"),
+      materialId: "2",
+      quantity: 2,
+      sellerId: "2",
+      origin: SaleOrigin.REFERENCE,
+      totalValue: 3200,
+      status: "pending",
+      ncmCode: NCMCode.GRANITE_PROCESSED
+    },
+    {
+      id: "3",
+      clientId: clientId as string,
+      date: new Date("2023-08-10"),
+      materialId: "3",
+      quantity: 1,
+      sellerId: "1",
+      origin: SaleOrigin.WEBSITE,
+      totalValue: 1800,
+      status: "paid",
+      ncmCode: NCMCode.MARBLE_RAW
+    },
+    {
+      id: "4",
+      clientId: clientId as string,
+      date: new Date("2023-09-05"),
+      materialId: "4",
+      quantity: 4,
+      sellerId: "3",
+      origin: SaleOrigin.SOCIAL_MEDIA,
+      totalValue: 6200,
+      status: "cancelled",
+      ncmCode: NCMCode.GRANITE_PROCESSED
+    },
+    {
+      id: "5",
+      clientId: clientId as string,
+      date: new Date("2023-10-18"),
+      materialId: "1",
+      quantity: 2,
+      sellerId: "2",
+      origin: SaleOrigin.DIRECT,
+      totalValue: 3000,
+      status: "paid",
+      ncmCode: NCMCode.MARBLE_PROCESSED
+    }
+  ];
+
   return (
     <DashboardLayout>
-      <div className="space-y-6 animate-fade-in">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-800 mb-2 font-heading">
-            Detalhes do Cliente
-          </h1>
-          <p className="text-slate-500">
-            Informações detalhadas e histórico de compras
-          </p>
-        </div>
+      <div className="container mx-auto py-10">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-2xl font-bold">Client Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center space-x-4">
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>{client.companyName.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div>
+                <h2 className="text-lg font-semibold">{client.companyName}</h2>
+                <p className="text-sm text-muted-foreground">Contact: {client.contactName}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <div>
+                <p className="text-sm font-medium">Email</p>
+                <p className="text-muted-foreground">{client.email}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium">Phone</p>
+                <p className="text-muted-foreground">{client.phone}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium">Address</p>
+                <p className="text-muted-foreground">
+                  {client.address.street}, {client.address.number}, {client.address.city}, {client.address.state} {client.address.zipCode}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium">CNPJ</p>
+                <p className="text-muted-foreground">{client.cnpj}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="md:col-span-1">
-            <CardHeader>
-              <CardTitle className="text-xl">Informações do Cliente</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm text-muted-foreground">Empresa</p>
-                <p className="font-medium">{client.companyName}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">CNPJ</p>
-                <p className="font-medium">{client.cnpj}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Contato</p>
-                <p className="font-medium">{client.contactName}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Email</p>
-                <p className="font-medium">{client.email}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Telefone</p>
-                <p className="font-medium">{client.phone}</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="md:col-span-2">
-            <CardHeader>
-              <CardTitle className="text-xl">Endereço</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Rua</p>
-                  <p className="font-medium">{client.address.street}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Número</p>
-                  <p className="font-medium">{client.address.number}</p>
-                </div>
-                {client.address.complement && (
-                  <div>
-                    <p className="text-sm text-muted-foreground">Complemento</p>
-                    <p className="font-medium">{client.address.complement}</p>
-                  </div>
-                )}
-                <div>
-                  <p className="text-sm text-muted-foreground">Cidade</p>
-                  <p className="font-medium">{client.address.city}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Estado</p>
-                  <p className="font-medium">{client.address.state}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">CEP</p>
-                  <p className="font-medium">{client.address.zipCode}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Tabs defaultValue="historico" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="historico">Histórico de Compras</TabsTrigger>
-            <TabsTrigger value="resumo">Resumo Financeiro</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="historico">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">Histórico de Compras</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {clientSales.length > 0 ? (
-                  <div className="rounded-md border">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Data</TableHead>
-                          <TableHead>Material</TableHead>
-                          <TableHead>Quantidade</TableHead>
-                          <TableHead>Valor (R$)</TableHead>
-                          <TableHead>Status</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {clientSales.map((sale) => (
-                          <TableRow key={sale.id} className="hover:bg-muted/50 transition-colors">
-                            <TableCell>{format(sale.date, "dd/MM/yyyy", { locale: ptBR })}</TableCell>
-                            <TableCell>{getMaterialName(sale.materialId)}</TableCell>
-                            <TableCell>{sale.quantity}</TableCell>
-                            <TableCell>{sale.totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</TableCell>
-                            <TableCell>{getStatusBadge(sale.status)}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                ) : (
-                  <p className="text-center py-6 text-muted-foreground">
-                    Este cliente ainda não realizou compras.
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="resumo">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">Resumo Financeiro</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card>
-                      <CardContent className="pt-6">
-                        <div className="text-center">
-                          <h3 className="text-lg font-medium text-muted-foreground">Total Comprado</h3>
-                          <p className="text-3xl font-bold mt-2">
-                            {totalPurchased.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="pt-6">
-                        <div className="text-center">
-                          <h3 className="text-lg font-medium text-muted-foreground">Total de Compras</h3>
-                          <p className="text-3xl font-bold mt-2">{clientSales.length}</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  
-                  <Card>
-                    <CardContent className="pt-6">
-                      <h3 className="text-lg font-medium mb-4">Status das Compras</h3>
-                      <div className="space-y-2">
-                        {['paid', 'pending', 'cancelled'].map((status) => {
-                          const count = clientSales.filter(sale => sale.status === status).length;
-                          const total = clientSales.filter(sale => sale.status === status)
-                            .reduce((acc, sale) => acc + sale.totalValue, 0);
-                          
-                          if (count === 0) return null;
-                          
-                          return (
-                            <div key={status} className="flex justify-between items-center">
-                              <div className="flex items-center">
-                                {getStatusBadge(status)}
-                                <span className="ml-2">{count} {count === 1 ? 'compra' : 'compras'}</span>
-                              </div>
-                              <span className="font-medium">
-                                {total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>Sales History</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableCaption>A list of recent sales made to this client.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Invoice</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {mockClientSales.map((sale) => (
+                  <TableRow key={sale.id}>
+                    <TableCell className="font-medium">{sale.id}</TableCell>
+                    <TableCell>{sale.date.toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      {sale.status === "paid" ? (
+                        <Badge variant="outline">Paid</Badge>
+                      ) : sale.status === "pending" ? (
+                        <Badge>Pending</Badge>
+                      ) : (
+                        <Badge variant="destructive">Cancelled</Badge>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-right">{sale.totalValue}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={3}>Total</TableCell>
+                  <TableCell className="text-right">$21,700.00</TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );

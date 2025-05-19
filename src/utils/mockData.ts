@@ -1,5 +1,4 @@
-
-import { User, UserRole, Material, MaterialType, Client, Transaction, TransactionType, Inventory, StockSummary, SalesSummary } from "../types";
+import { User, UserRole, Material, MaterialType, Client, Transaction, TransactionType, Inventory, StockSummary, SalesSummary, ProcessingLevel, NCMCode } from "../types";
 
 // Mock Users
 export const mockUsers: User[] = [
@@ -42,7 +41,9 @@ export const mockMaterials: Material[] = [
     quantity: 5,
     purchaseDate: new Date("2023-01-15"),
     purchasePrice: 1200,
-    supplier: "Italian Imports Ltd."
+    supplier: "Italian Imports Ltd.",
+    ncmCode: NCMCode.MARBLE_PROCESSED,
+    processingLevel: ProcessingLevel.POLISHED
   },
   {
     id: "2",
@@ -58,7 +59,9 @@ export const mockMaterials: Material[] = [
     quantity: 3,
     purchaseDate: new Date("2023-02-20"),
     purchasePrice: 1500,
-    supplier: "Indian Stone Co."
+    supplier: "Indian Stone Co.",
+    ncmCode: NCMCode.GRANITE_PROCESSED,
+    processingLevel: ProcessingLevel.POLISHED
   },
   {
     id: "3",
@@ -74,7 +77,9 @@ export const mockMaterials: Material[] = [
     quantity: 8,
     purchaseDate: new Date("2023-03-10"),
     purchasePrice: 950,
-    supplier: "Turkish Stones Inc."
+    supplier: "Turkish Stones Inc.",
+    ncmCode: NCMCode.MARBLE_RAW,
+    processingLevel: ProcessingLevel.CUT
   },
   {
     id: "4",
@@ -90,7 +95,9 @@ export const mockMaterials: Material[] = [
     quantity: 2,
     purchaseDate: new Date("2023-03-25"),
     purchasePrice: 1800,
-    supplier: "African Quarries Ltd."
+    supplier: "African Quarries Ltd.",
+    ncmCode: NCMCode.GRANITE_PROCESSED,
+    processingLevel: ProcessingLevel.FINISHED
   }
 ];
 

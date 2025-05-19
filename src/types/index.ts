@@ -1,3 +1,4 @@
+
 export enum UserRole {
   OPERATOR = "operator",
   MANAGER = "manager",
@@ -19,6 +20,7 @@ export enum NCMCode {
   MARBLE_PROCESSED = "6802.91.00", // Mármore beneficiado (polido, cortado)
   GRANITE_PROCESSED = "6802.93.10", // Granito beneficiado para construção
   GRANITE_MOSAIC = "6802.99.10",   // Mosaicos e peças de granito
+  QUARTZITE_PROCESSED = "6802.29.00", // Quartzito beneficiado
   OTHER = "9999.99.99"            // Outros (temporário até classificação correta)
 }
 

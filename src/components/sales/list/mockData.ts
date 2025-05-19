@@ -1,5 +1,4 @@
-
-import { Sale, SaleOrigin, MaterialType, MaterialSubtype } from "@/types";
+import { Sale, SaleOrigin, MaterialType, MaterialSubtype, NCMCode } from "@/types";
 
 // Mock data for sales, clients, materials, and sellers
 export const mockSales: Sale[] = [
@@ -13,6 +12,7 @@ export const mockSales: Sale[] = [
     origin: SaleOrigin.DIRECT,
     totalValue: 4500,
     status: "paid",
+    ncmCode: NCMCode.MARBLE_PROCESSED,
   },
   {
     id: "2",
@@ -24,6 +24,7 @@ export const mockSales: Sale[] = [
     origin: SaleOrigin.REFERENCE,
     totalValue: 2400,
     status: "pending",
+    ncmCode: NCMCode.GRANITE_PROCESSED,
   },
   {
     id: "3",
@@ -35,6 +36,7 @@ export const mockSales: Sale[] = [
     origin: SaleOrigin.WEBSITE,
     totalValue: 2200,
     status: "paid",
+    ncmCode: NCMCode.QUARTZITE_PROCESSED,
   },
   {
     id: "4",
@@ -46,6 +48,7 @@ export const mockSales: Sale[] = [
     origin: SaleOrigin.SOCIAL_MEDIA,
     totalValue: 6000,
     status: "cancelled",
+    ncmCode: NCMCode.GRANITE_PROCESSED,
   },
 ];
 
