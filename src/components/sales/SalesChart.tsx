@@ -93,14 +93,14 @@ const SalesChart = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Gráfico principal - Vendas Mensais */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Vendas por Tipo de Material (Mensal)</CardTitle>
+      <Card className="overflow-hidden">
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">Vendas por Tipo de Material (Mensal)</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="h-80">
+        <CardContent className="p-2 sm:p-6 pt-0">
+          <div className="h-64 sm:h-80">
             {monthlySalesData.length > 0 ? (
               <ResponsiveContainer width="99%" height="100%">
                 <BarChart
@@ -163,14 +163,14 @@ const SalesChart = () => {
       </Card>
 
       {/* Gráficos secundários */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Gráfico de pizza - Distribuição de vendas por material */}
-        <Card>
-          <CardHeader>
+        <Card className="overflow-hidden">
+          <CardHeader className="p-4 sm:p-6">
             <CardTitle className="text-lg">Distribuição de Vendas</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="h-64">
+          <CardContent className="p-2 sm:p-6 pt-0">
+            <div className="h-56 sm:h-64">
               <ResponsiveContainer width="99%" height="100%">
                 <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                   <Pie
@@ -178,11 +178,14 @@ const SalesChart = () => {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    outerRadius={80}
+                    outerRadius={65}
+                    innerRadius={window.innerWidth < 768 ? 10 : 0}
                     fill="#8884d8"
                     dataKey="value"
                     nameKey="name"
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) => (window.innerWidth < 640 ? 
+                      `${(percent * 100).toFixed(0)}%` : 
+                      `${name}: ${(percent * 100).toFixed(0)}%`)}
                   >
                     {materialSalesData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
@@ -196,12 +199,12 @@ const SalesChart = () => {
         </Card>
 
         {/* Gráfico de área - Tendência diária */}
-        <Card>
-          <CardHeader>
+        <Card className="overflow-hidden">
+          <CardHeader className="p-4 sm:p-6">
             <CardTitle className="text-lg">Tendência de Vendas Diárias</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="h-64">
+          <CardContent className="p-2 sm:p-6 pt-0">
+            <div className="h-56 sm:h-64">
               <ResponsiveContainer width="99%" height="100%">
                 <AreaChart
                   data={dailySalesData}
@@ -241,17 +244,17 @@ const SalesChart = () => {
       </div>
 
       {/* Cards de resumo por tipo de material */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {materialSalesData.map((material) => (
           <Card key={material.name} className="overflow-hidden">
             <div className="h-2" style={{ backgroundColor: material.color }} />
-            <CardContent className="pt-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">{material.name}</span>
-                  <span className="text-sm font-medium">{material.percentage}% do total</span>
+                  <span className="text-xs sm:text-sm text-muted-foreground overflow-hidden text-ellipsis">{material.name}</span>
+                  <span className="text-xs sm:text-sm font-medium">{material.percentage}% do total</span>
                 </div>
-                <div className="text-2xl font-bold">
+                <div className="text-xl sm:text-2xl font-bold">
                   {formatCurrency(material.value)}
                 </div>
               </div>

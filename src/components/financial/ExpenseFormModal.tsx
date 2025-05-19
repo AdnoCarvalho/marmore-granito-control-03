@@ -109,33 +109,33 @@ const ExpenseFormModal = ({ open, onOpenChange }: ExpenseFormModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="text-xl flex items-center gap-2 text-red-700">
-            <XCircle className="h-5 w-5 rotate-45 text-red-600" />
+      <DialogContent className="sm:max-w-[500px] w-[calc(100%-2rem)] mx-auto max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="space-y-2 text-center sm:text-left">
+          <DialogTitle className="text-lg sm:text-xl flex items-center gap-2 text-red-700 justify-center sm:justify-start">
+            <XCircle className="h-4 w-4 sm:h-5 sm:w-5 rotate-45 text-red-600" />
             Nova Despesa
           </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
             {/* Expense Category */}
             <FormField
               control={form.control}
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Categoria</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">Categoria</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione uma categoria" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="w-full max-h-[40vh] overflow-y-auto" position="popper">
                       {EXPENSE_CATEGORIES.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.label}
@@ -154,12 +154,13 @@ const ExpenseFormModal = ({ open, onOpenChange }: ExpenseFormModalProps) => {
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Valor (R$)</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">Valor (R$)</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
                       step="0.01"
                       placeholder="0.00"
+                      className="w-full"
                       {...field}
                     />
                   </FormControl>
@@ -174,7 +175,7 @@ const ExpenseFormModal = ({ open, onOpenChange }: ExpenseFormModalProps) => {
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Data</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">Data</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -212,10 +213,11 @@ const ExpenseFormModal = ({ open, onOpenChange }: ExpenseFormModalProps) => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Descrição</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">Descrição</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Detalhes sobre esta despesa..."
+                      className="w-full resize-y min-h-[80px]"
                       {...field}
                     />
                   </FormControl>
@@ -224,18 +226,18 @@ const ExpenseFormModal = ({ open, onOpenChange }: ExpenseFormModalProps) => {
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-0 pt-2 sm:pt-4">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
-                className="mt-2 sm:mt-0"
+                className="w-full sm:w-auto order-2 sm:order-1"
               >
                 Cancelar
               </Button>
               <Button
                 type="submit"
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-red-600 hover:bg-red-700 w-full sm:w-auto order-1 sm:order-2"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Registrando..." : "Registrar Despesa"}

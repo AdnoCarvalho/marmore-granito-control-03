@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { CalendarIcon, XCircle, DollarSign } from "lucide-react";
+import { CalendarIcon, DollarSign } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { z } from "zod";
@@ -104,33 +104,33 @@ const IncomeFormModal = ({ open, onOpenChange }: IncomeFormModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] rounded-lg shadow-lg border-0">
-        <DialogHeader className="border-b pb-4">
-          <DialogTitle className="text-xl flex items-center gap-2 text-[#28a745]">
-            <DollarSign className="h-5 w-5 text-[#28a745]" />
+      <DialogContent className="sm:max-w-[500px] w-[calc(100%-2rem)] mx-auto max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="space-y-2 text-center sm:text-left border-b pb-4">
+          <DialogTitle className="text-lg sm:text-xl flex items-center gap-2 text-[#28a745] justify-center sm:justify-start">
+            <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-[#28a745]" />
             Nova Receita
           </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6 py-2 sm:py-4">
             {/* Source of income */}
             <FormField
               control={form.control}
               name="source"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-700">Origem da Receita</FormLabel>
+                  <FormLabel className="text-sm sm:text-base text-slate-700">Origem da Receita</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className="rounded-lg border-slate-300 focus:ring-[#28a745] focus:border-[#28a745]">
+                      <SelectTrigger className="w-full rounded-lg border-slate-300 focus:ring-[#28a745] focus:border-[#28a745]">
                         <SelectValue placeholder="Selecione a origem" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="rounded-lg">
+                    <SelectContent className="w-full rounded-lg max-h-[40vh] overflow-y-auto" position="popper">
                       {INCOME_SOURCES.map((source) => (
                         <SelectItem key={source.id} value={source.id}>
                           {source.label}
@@ -149,13 +149,13 @@ const IncomeFormModal = ({ open, onOpenChange }: IncomeFormModalProps) => {
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-700">Valor (R$)</FormLabel>
+                  <FormLabel className="text-sm sm:text-base text-slate-700">Valor (R$)</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
                       step="0.01"
                       placeholder="0.00"
-                      className="rounded-lg border-slate-300 focus:ring-[#28a745] focus:border-[#28a745]"
+                      className="w-full rounded-lg border-slate-300 focus:ring-[#28a745] focus:border-[#28a745]"
                       {...field}
                     />
                   </FormControl>
@@ -170,7 +170,7 @@ const IncomeFormModal = ({ open, onOpenChange }: IncomeFormModalProps) => {
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="text-slate-700">Data</FormLabel>
+                  <FormLabel className="text-sm sm:text-base text-slate-700">Data</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -187,7 +187,7 @@ const IncomeFormModal = ({ open, onOpenChange }: IncomeFormModalProps) => {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 rounded-lg" align="start">
+                    <PopoverContent className="w-auto p-0 rounded-lg max-h-[40vh] overflow-y-auto" align="start">
                       <Calendar
                         mode="single"
                         selected={field.value}
@@ -209,11 +209,11 @@ const IncomeFormModal = ({ open, onOpenChange }: IncomeFormModalProps) => {
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-700">Observações</FormLabel>
+                  <FormLabel className="text-sm sm:text-base text-slate-700">Observações</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Detalhes adicionais sobre esta receita..."
-                      className="rounded-lg border-slate-300 focus:ring-[#28a745] focus:border-[#28a745]"
+                      className="w-full rounded-lg border-slate-300 focus:ring-[#28a745] focus:border-[#28a745] resize-y min-h-[80px]"
                       {...field}
                     />
                   </FormControl>
@@ -222,18 +222,18 @@ const IncomeFormModal = ({ open, onOpenChange }: IncomeFormModalProps) => {
               )}
             />
 
-            <DialogFooter className="pt-4">
+            <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-0 pt-2 sm:pt-4">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
-                className="mt-2 sm:mt-0 rounded-lg border-slate-300"
+                className="w-full sm:w-auto order-2 sm:order-1 rounded-lg border-slate-300"
               >
                 Cancelar
               </Button>
               <Button
                 type="submit"
-                className="bg-[#28a745] hover:bg-[#218838] rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+                className="bg-[#28a745] hover:bg-[#218838] rounded-lg shadow-sm hover:shadow-md transition-all duration-200 w-full sm:w-auto order-1 sm:order-2"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Registrando..." : "Registrar Receita"}
