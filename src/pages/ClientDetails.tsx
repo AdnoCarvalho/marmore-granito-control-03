@@ -1,5 +1,6 @@
+
 import React from "react";
-import { useRouter } from 'next/router';
+import { useParams } from 'react-router-dom';
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,8 +19,8 @@ import { mockClients } from "@/utils/mockData";
 import { Sale, SaleOrigin, NCMCode } from "@/types";
 
 const ClientDetails = () => {
-  const router = useRouter();
-  const { clientId } = router.query;
+  const params = useParams();
+  const clientId = params.clientId;
 
   // Find the client based on the clientId from the route
   const client = mockClients.find(c => c.id === clientId);
