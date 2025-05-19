@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link, useLocation } from "react-router-dom";
@@ -13,7 +14,8 @@ import {
   Bell, 
   ChevronDown,
   ShoppingCart,
-  Package
+  Package,
+  FileText
 } from "lucide-react";
 import { UserRole } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -117,6 +119,13 @@ const MainLayoutContent = ({ children }: MainLayoutProps) => {
       icon: Wallet,
       label: "Financeiro",
       roles: [UserRole.ADMIN],
+    },
+    // Novo item de menu para classificação fiscal
+    {
+      to: "/fiscal-ncm",
+      icon: FileText,
+      label: "NCM/Fiscal",
+      roles: [UserRole.MANAGER, UserRole.ADMIN],
     },
   ];
 

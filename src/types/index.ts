@@ -1,4 +1,3 @@
-
 export enum UserRole {
   OPERATOR = "operator",
   MANAGER = "manager",
@@ -13,10 +12,38 @@ export interface User {
   avatar?: string;
 }
 
+// Enums para códigos NCM comuns do setor de rochas
+export enum NCMCode {
+  MARBLE_RAW = "2515.11.00",      // Mármore bruto, desbastado ou serrado
+  GRANITE_RAW = "2516.11.00",     // Granito bruto, desbastado ou serrado
+  MARBLE_PROCESSED = "6802.91.00", // Mármore beneficiado (polido, cortado)
+  GRANITE_PROCESSED = "6802.93.10", // Granito beneficiado para construção
+  GRANITE_MOSAIC = "6802.99.10",   // Mosaicos e peças de granito
+  OTHER = "9999.99.99"            // Outros (temporário até classificação correta)
+}
+
+// Enums para nível de processamento/beneficiamento
+export enum ProcessingLevel {
+  RAW = "raw",           // Bruto
+  CUT = "cut",           // Cortado
+  POLISHED = "polished", // Polido
+  FINISHED = "finished"  // Acabado/Finalizado
+}
+
+// Interface para informações tributárias associadas a um NCM
+export interface NCMTaxInfo {
+  ncmCode: string;
+  description: string;
+  icms: number;
+  ipi: number;
+  pis: number;
+  cofins: number;
+}
+
 export enum MaterialType {
   MARBLE = "marble",
   GRANITE = "granite",
-  QUARTZITE = "quartzite" // Novo tipo: Quartzito
+  QUARTZITE = "quartzite"
 }
 
 export enum MaterialSubtype {
@@ -42,6 +69,10 @@ export interface Material {
   supplier: string;
   pricePerSquareMeter?: number; // Preço por m²
   notes?: string; // Observações
+  // Novos campos para classificação fiscal
+  ncmCode: string;
+  processingLevel: ProcessingLevel;
+  taxInfo?: NCMTaxInfo;
 }
 
 export interface Client {
@@ -122,4 +153,12 @@ export interface Sale {
   origin: SaleOrigin;
   totalValue: number;
   status: "paid" | "pending" | "cancelled";
+  // Novos campos para classificação fiscal
+  ncmCode: string;
+  taxes?: {
+    icms: number;
+    ipi: number;
+    pis: number;
+    cofins: number;
+  };
 }

@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,7 +29,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Material, MaterialType, MaterialSubtype } from "@/types";
+import { 
+  Material, 
+  MaterialType, 
+  MaterialSubtype, 
+  ProcessingLevel,
+  NCMCode 
+} from "@/types";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { AlertCircle } from "lucide-react";
+import { suggestNCM, validateNCMFormat, getTaxInfo } from "@/utils/ncmUtils";
+import NCMHelpTooltip from "@/components/fiscal/NCMHelpTooltip";
 
 // Schema de validação para o formulário
 const materialFormSchema = z.object({
@@ -66,6 +82,15 @@ const materialFormSchema = z.object({
     message: "Preço de compra deve ser um número positivo ou zero.",
   }),
   notes: z.string().optional(),
+  // Novos campos para classificação fiscal
+  processingLevel: z.nativeEnum(ProcessingLevel, {
+    required_error: "Selecione o nível de beneficiamento."
+  }),
+  ncmCode: z.string().min(10, {
+    message: "Código NCM deve estar no formato XXXX.XX.XX"
+  }).refine(validateNCMFormat, {
+    message: "Formato inválido. Use o formato XXXX.XX.XX"
+  })
 });
 
 type MaterialFormValues = z.infer<typeof materialFormSchema>;
@@ -76,6 +101,8 @@ interface AddMaterialDialogProps {
 
 const AddMaterialDialog = ({ onClose }: AddMaterialDialogProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [ncmTaxInfo, setNcmTaxInfo] = useState<any>(null);
+  const [isNcmInvalid, setIsNcmInvalid] = useState(false);
 
   // Inicializar formulário com valores padrão
   const form = useForm<MaterialFormValues>({
@@ -94,8 +121,35 @@ const AddMaterialDialog = ({ onClose }: AddMaterialDialogProps) => {
       supplier: "",
       purchasePrice: 0,
       notes: "",
+      // Valores padrão para campos fiscais
+      processingLevel: ProcessingLevel.RAW,
+      ncmCode: NCMCode.MARBLE_RAW
     },
+    mode: "onChange"
   });
+
+  // Monitorar mudanças no tipo do material e nível de processamento para sugerir NCM
+  const materialType = form.watch("type");
+  const processingLevel = form.watch("processingLevel");
+  const ncmCode = form.watch("ncmCode");
+  
+  // Efeito para sugerir NCM quando o tipo de material ou nível de processamento mudar
+  useEffect(() => {
+    const suggestedNcm = suggestNCM(materialType, processingLevel);
+    form.setValue("ncmCode", suggestedNcm);
+  }, [materialType, processingLevel, form]);
+
+  // Efeito para buscar informações tributárias quando o NCM mudar
+  useEffect(() => {
+    if (ncmCode && validateNCMFormat(ncmCode)) {
+      const taxInfo = getTaxInfo(ncmCode);
+      setNcmTaxInfo(taxInfo);
+      setIsNcmInvalid(false);
+    } else if (ncmCode && ncmCode.length >= 10) {
+      setIsNcmInvalid(true);
+      setNcmTaxInfo(null);
+    }
+  }, [ncmCode]);
 
   const onSubmit = (data: MaterialFormValues) => {
     setIsSubmitting(true);
@@ -103,6 +157,8 @@ const AddMaterialDialog = ({ onClose }: AddMaterialDialogProps) => {
     // Simulando adição ao banco de dados
     setTimeout(() => {
       // Criar objeto de material com os dados do formulário
+      const taxInfo = ncmTaxInfo || getTaxInfo(data.ncmCode);
+      
       const newMaterial: Partial<Material> = {
         ...data,
         id: `MAT-${Math.floor(Math.random() * 10000)}`,
@@ -112,6 +168,7 @@ const AddMaterialDialog = ({ onClose }: AddMaterialDialogProps) => {
           height: data.height,
           thickness: data.thickness,
         },
+        taxInfo
       };
 
       console.log("Novo material cadastrado:", newMaterial);
@@ -136,7 +193,7 @@ const AddMaterialDialog = ({ onClose }: AddMaterialDialogProps) => {
   const totalValue = area * watchPrice * watchQuantity;
 
   return (
-    <DialogContent className="max-w-2xl">
+    <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
       <DialogHeader>
         <DialogTitle>Adicionar Novo Material</DialogTitle>
       </DialogHeader>
@@ -222,6 +279,75 @@ const AddMaterialDialog = ({ onClose }: AddMaterialDialogProps) => {
                       <SelectItem value={MaterialSubtype.BLOCK}>Bloco</SelectItem>
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* NOVO: Nível de Beneficiamento */}
+            <FormField
+              control={form.control}
+              name="processingLevel"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nível de Beneficiamento</FormLabel>
+                  <Select 
+                    onValueChange={field.onChange} 
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o beneficiamento" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value={ProcessingLevel.RAW}>Bruto</SelectItem>
+                      <SelectItem value={ProcessingLevel.CUT}>Cortado</SelectItem>
+                      <SelectItem value={ProcessingLevel.POLISHED}>Polido</SelectItem>
+                      <SelectItem value={ProcessingLevel.FINISHED}>Acabado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* NOVO: Código NCM */}
+            <FormField
+              control={form.control}
+              name="ncmCode"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-1">
+                    <FormLabel>Código NCM</FormLabel>
+                    <NCMHelpTooltip compact />
+                  </div>
+                  <div className="relative">
+                    <FormControl>
+                      <Input 
+                        placeholder="Ex: 2516.11.00" 
+                        {...field} 
+                        className={isNcmInvalid ? "border-red-500 pr-8" : ""}
+                      />
+                    </FormControl>
+                    {isNcmInvalid && (
+                      <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <AlertCircle className="h-4 w-4 text-red-500" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Formato de NCM inválido</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    )}
+                  </div>
+                  <FormDescription className="text-xs">
+                    Código NCM para classificação fiscal (formato: XXXX.XX.XX)
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -361,6 +487,33 @@ const AddMaterialDialog = ({ onClose }: AddMaterialDialogProps) => {
               </div>
             </div>
           </div>
+
+          {/* Informações fiscais - NCM */}
+          {ncmTaxInfo && (
+            <div className="bg-blue-50 border border-blue-100 rounded-md p-4 space-y-2">
+              <h3 className="text-sm font-medium text-blue-900">Informações Fiscais do NCM: {ncmTaxInfo.ncmCode}</h3>
+              <p className="text-xs text-blue-800">{ncmTaxInfo.description}</p>
+              
+              <div className="grid grid-cols-4 gap-2 mt-2">
+                <div className="bg-white p-2 rounded border border-blue-100">
+                  <p className="text-xs text-muted-foreground">ICMS</p>
+                  <p className="font-medium text-sm">{ncmTaxInfo.icms}%</p>
+                </div>
+                <div className="bg-white p-2 rounded border border-blue-100">
+                  <p className="text-xs text-muted-foreground">IPI</p>
+                  <p className="font-medium text-sm">{ncmTaxInfo.ipi}%</p>
+                </div>
+                <div className="bg-white p-2 rounded border border-blue-100">
+                  <p className="text-xs text-muted-foreground">PIS</p>
+                  <p className="font-medium text-sm">{ncmTaxInfo.pis}%</p>
+                </div>
+                <div className="bg-white p-2 rounded border border-blue-100">
+                  <p className="text-xs text-muted-foreground">COFINS</p>
+                  <p className="font-medium text-sm">{ncmTaxInfo.cofins}%</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Observações */}
           <FormField
