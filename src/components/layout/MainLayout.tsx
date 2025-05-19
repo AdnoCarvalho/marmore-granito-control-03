@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link, useLocation } from "react-router-dom";
@@ -69,6 +68,7 @@ const MainLayoutContent = ({ children }: MainLayoutProps) => {
   const location = useLocation();
   const { toggleSidebar, openMobile, setOpenMobile } = useSidebar();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Monitor scroll position for header shadow
   useEffect(() => {
