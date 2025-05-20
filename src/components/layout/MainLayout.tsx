@@ -15,7 +15,7 @@ import {
   ChevronDown,
   ShoppingCart,
   Package,
-  FileText
+  Calendar
 } from "lucide-react";
 import { UserRole } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -120,11 +120,11 @@ const MainLayoutContent = ({ children }: MainLayoutProps) => {
       label: "Financeiro",
       roles: [UserRole.ADMIN],
     },
-    // Novo item de menu para classificação fiscal
+    // Replacing the NCM/Fiscal tab with Appointments scheduling
     {
-      to: "/fiscal-ncm",
-      icon: FileText,
-      label: "NCM/Fiscal",
+      to: "/appointments",
+      icon: Calendar,
+      label: "Agenda",
       roles: [UserRole.MANAGER, UserRole.ADMIN],
     },
   ];

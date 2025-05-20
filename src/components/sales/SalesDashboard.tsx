@@ -67,7 +67,7 @@ const SalesDashboard = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
       {/* Total Revenue */}
-      <Card className="overflow-hidden bg-slate-800 border-slate-700">
+      <Card className="overflow-hidden bg-card border-slate-700">
         <div className="h-2 bg-primary" />
         <CardContent className="p-6 flex items-center justify-between">
           <div>
@@ -83,7 +83,7 @@ const SalesDashboard = () => {
       </Card>
 
       {/* Total Services Provided */}
-      <Card className="overflow-hidden bg-slate-800 border-slate-700">
+      <Card className="overflow-hidden bg-card border-slate-700">
         <div className="h-2 bg-blue-500" />
         <CardContent className="p-6 flex items-center justify-between">
           <div>
@@ -97,7 +97,7 @@ const SalesDashboard = () => {
       </Card>
 
       {/* Most Popular Service */}
-      <Card className="overflow-hidden bg-slate-800 border-slate-700">
+      <Card className="overflow-hidden bg-card border-slate-700">
         <div className="h-2 bg-emerald-500" />
         <CardContent className="p-6 flex items-center justify-between">
           <div>
@@ -112,7 +112,7 @@ const SalesDashboard = () => {
       </Card>
 
       {/* Last Customer */}
-      <Card className="overflow-hidden bg-slate-800 border-slate-700">
+      <Card className="overflow-hidden bg-card border-slate-700">
         <div className="h-2 bg-purple-500" />
         <CardContent className="p-6 flex items-center justify-between">
           <div>

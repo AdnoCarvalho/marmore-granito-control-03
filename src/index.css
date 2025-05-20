@@ -7,25 +7,26 @@
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
+    /* Fully dark theme - based on the reference screenshot */
+    --background: 222 47% 5%;
     --foreground: 210 40% 98%;
 
-    --card: 217 33% 17%;
+    --card: 222 47% 8%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 217 33% 17%;
+    --popover: 222 47% 8%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 326 100% 60%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 217 32% 17%;
+    --secondary: 217 32% 12%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 32% 17%;
+    --muted: 217 32% 12%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 217 32% 17%;
+    --accent: 217 32% 12%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62% 30%;
@@ -37,7 +38,7 @@
 
     --radius: 0.75rem;
 
-    --sidebar-background: 220 47% 11%;
+    --sidebar-background: 222 47% 5%;
     --sidebar-foreground: 240 5% 96%;
     --sidebar-primary: 326 100% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
