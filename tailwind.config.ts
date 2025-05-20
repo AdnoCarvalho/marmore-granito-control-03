@@ -30,7 +30,7 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: '#F9802D',
+					DEFAULT: '#F25CAF', // Changed to pink for beauty studio theme
 					foreground: 'hsl(var(--primary-foreground))'
 				},
 				secondary: {
@@ -73,10 +73,10 @@ export default {
 					500: '#0EA5E9',
 				},
 				status: {
-					paid: '#22C55E',       // Green for paid
-					pending: '#EA384C',    // Red for pending
-					processing: '#F97316', // Orange for processing
-					cancelled: '#8B5CF6',  // Purple for cancelled
+					paid: '#10B981',       // Green for paid
+					pending: '#F59E0B',    // Amber for pending
+					processing: '#F25CAF', // Pink for processing (beauty theme)
+					cancelled: '#EF4444',  // Red for cancelled
 				}
 			},
 			borderRadius: {
@@ -122,8 +122,8 @@ export default {
 				'scale-in': 'scale-in 0.2s ease-out',
 			},
 			boxShadow: {
-				'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-				'card-hover': '0 8px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+				'card': '0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
+				'card-hover': '0 8px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)',
 			}
 		}
 	},

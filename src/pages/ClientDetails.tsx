@@ -28,22 +28,22 @@ const ClientDetails = () => {
   if (!client) {
     return (
       <DashboardLayout>
-        <div>Client not found</div>
+        <div>Cliente não encontrado</div>
       </DashboardLayout>
     );
   }
 
-  // Mock sales data for the client
-  const mockClientSales: Sale[] = [
+  // Mock service appointments data for the client
+  const mockClientAppointments: Sale[] = [
     {
       id: "1",
       clientId: clientId as string,
       date: new Date("2023-06-15"),
       materialId: "1",
-      quantity: 3,
+      quantity: 1,
       sellerId: "1",
       origin: SaleOrigin.DIRECT,
-      totalValue: 4500,
+      totalValue: 120,
       status: "paid",
       ncmCode: NCMCode.MARBLE_PROCESSED
     },
@@ -52,10 +52,10 @@ const ClientDetails = () => {
       clientId: clientId as string,
       date: new Date("2023-07-20"),
       materialId: "2",
-      quantity: 2,
+      quantity: 1,
       sellerId: "2",
       origin: SaleOrigin.REFERENCE,
-      totalValue: 3200,
+      totalValue: 180,
       status: "pending",
       ncmCode: NCMCode.GRANITE_PROCESSED
     },
@@ -67,7 +67,7 @@ const ClientDetails = () => {
       quantity: 1,
       sellerId: "1",
       origin: SaleOrigin.WEBSITE,
-      totalValue: 1800,
+      totalValue: 150,
       status: "paid",
       ncmCode: NCMCode.MARBLE_RAW
     },
@@ -76,10 +76,10 @@ const ClientDetails = () => {
       clientId: clientId as string,
       date: new Date("2023-09-05"),
       materialId: "4",
-      quantity: 4,
+      quantity: 1,
       sellerId: "3",
       origin: SaleOrigin.SOCIAL_MEDIA,
-      totalValue: 6200,
+      totalValue: 200,
       status: "cancelled",
       ncmCode: NCMCode.GRANITE_PROCESSED
     },
@@ -88,93 +88,108 @@ const ClientDetails = () => {
       clientId: clientId as string,
       date: new Date("2023-10-18"),
       materialId: "1",
-      quantity: 2,
+      quantity: 1,
       sellerId: "2",
       origin: SaleOrigin.DIRECT,
-      totalValue: 3000,
+      totalValue: 120,
       status: "paid",
       ncmCode: NCMCode.MARBLE_PROCESSED
     }
   ];
 
+  // Map material IDs to beauty services
+  const serviceNames: Record<string, string> = {
+    "1": "Design de Sobrancelhas",
+    "2": "Extensão de Cílios",
+    "3": "Manicure",
+    "4": "Pedicure"
+  };
+
   return (
     <DashboardLayout>
       <div className="container mx-auto py-10">
-        <Card>
+        <Card className="bg-slate-800 border-slate-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-2xl font-bold">Client Details</CardTitle>
+            <CardTitle className="text-2xl font-bold text-slate-200">Detalhes da Cliente</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-slate-300">
             <div className="flex items-center space-x-4">
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>{client.companyName.charAt(0)}</AvatarFallback>
+                <AvatarFallback className="bg-pink-900/50 text-pink-200">{client.companyName.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
-                <h2 className="text-lg font-semibold">{client.companyName}</h2>
-                <p className="text-sm text-muted-foreground">Contact: {client.contactName}</p>
+                <h2 className="text-lg font-semibold text-slate-100">{client.companyName}</h2>
+                <p className="text-sm text-slate-400">Contato: {client.contactName}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               <div>
-                <p className="text-sm font-medium">Email</p>
-                <p className="text-muted-foreground">{client.email}</p>
+                <p className="text-sm font-medium text-slate-300">Email</p>
+                <p className="text-slate-400">{client.email}</p>
               </div>
               <div>
-                <p className="text-sm font-medium">Phone</p>
-                <p className="text-muted-foreground">{client.phone}</p>
+                <p className="text-sm font-medium text-slate-300">Telefone</p>
+                <p className="text-slate-400">{client.phone}</p>
               </div>
               <div>
-                <p className="text-sm font-medium">Address</p>
-                <p className="text-muted-foreground">
+                <p className="text-sm font-medium text-slate-300">Endereço</p>
+                <p className="text-slate-400">
                   {client.address.street}, {client.address.number}, {client.address.city}, {client.address.state} {client.address.zipCode}
                 </p>
               </div>
               <div>
-                <p className="text-sm font-medium">CNPJ</p>
-                <p className="text-muted-foreground">{client.cnpj}</p>
+                <p className="text-sm font-medium text-slate-300">CPF</p>
+                <p className="text-slate-400">{client.cnpj}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="mt-6">
+        <Card className="mt-6 bg-slate-800 border-slate-700">
           <CardHeader>
-            <CardTitle>Sales History</CardTitle>
+            <CardTitle className="text-slate-200">Histórico de Atendimentos</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
-              <TableCaption>A list of recent sales made to this client.</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">Invoice</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
+              <TableCaption className="text-slate-400">Histórico de serviços realizados para esta cliente.</TableCaption>
+              <TableHeader className="border-slate-700">
+                <TableRow className="border-slate-700">
+                  <TableHead className="w-[100px] text-slate-300">Ref</TableHead>
+                  <TableHead className="text-slate-300">Data</TableHead>
+                  <TableHead className="text-slate-300">Serviço</TableHead>
+                  <TableHead className="text-slate-300">Status</TableHead>
+                  <TableHead className="text-right text-slate-300">Valor</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {mockClientSales.map((sale) => (
-                  <TableRow key={sale.id}>
-                    <TableCell className="font-medium">{sale.id}</TableCell>
-                    <TableCell>{sale.date.toLocaleDateString()}</TableCell>
+                {mockClientAppointments.map((appointment) => (
+                  <TableRow key={appointment.id} className="border-slate-700 hover:bg-slate-700/50">
+                    <TableCell className="font-medium text-slate-300">{appointment.id}</TableCell>
+                    <TableCell className="text-slate-300">{appointment.date.toLocaleDateString()}</TableCell>
+                    <TableCell className="text-slate-300">{serviceNames[appointment.materialId] || "Outro Serviço"}</TableCell>
                     <TableCell>
-                      {sale.status === "paid" ? (
-                        <Badge variant="outline">Paid</Badge>
-                      ) : sale.status === "pending" ? (
-                        <Badge>Pending</Badge>
+                      {appointment.status === "paid" ? (
+                        <Badge className="bg-emerald-600 hover:bg-emerald-700 text-emerald-100">Pago</Badge>
+                      ) : appointment.status === "pending" ? (
+                        <Badge className="bg-amber-600 hover:bg-amber-700 text-amber-100">Pendente</Badge>
                       ) : (
-                        <Badge variant="destructive">Cancelled</Badge>
+                        <Badge className="bg-red-600 hover:bg-red-700 text-red-100">Cancelado</Badge>
                       )}
                     </TableCell>
-                    <TableCell className="text-right">{sale.totalValue}</TableCell>
+                    <TableCell className="text-right text-slate-300">R$ {appointment.totalValue.toFixed(2)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell colSpan={3}>Total</TableCell>
-                  <TableCell className="text-right">$21,700.00</TableCell>
+              <TableFooter className="border-slate-700 bg-slate-800">
+                <TableRow className="border-slate-700">
+                  <TableCell colSpan={4} className="text-slate-200">Total</TableCell>
+                  <TableCell className="text-right text-slate-200">
+                    R$ {mockClientAppointments
+                      .filter(appointment => appointment.status !== "cancelled")
+                      .reduce((acc, appointment) => acc + appointment.totalValue, 0)
+                      .toFixed(2)}
+                  </TableCell>
                 </TableRow>
               </TableFooter>
             </Table>

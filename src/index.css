@@ -7,83 +7,44 @@
 
 @layer base {
   :root {
-    --background: 220 30% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 217 33% 17%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 29 94% 58%;
+    --primary: 326 100% 60%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217 32% 17%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 217 32% 17%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 62% 30%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 29 94% 58%;
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 326 100% 60%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 29 94% 58%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 29 94% 58%;
-  }
-
-  .dark {
-    --background: 224 71% 4%;
-    --foreground: 210 40% 98%;
-
-    --card: 224 71% 4%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 224 71% 4%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 29 94% 58%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 29 94% 58%;
-
-    --sidebar-background: 224 71% 4%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 29 94% 58%;
+    --sidebar-background: 220 47% 11%;
+    --sidebar-foreground: 240 5% 96%;
+    --sidebar-primary: 326 100% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 29 94% 58%;
+    --sidebar-accent: 240 4% 16%;
+    --sidebar-accent-foreground: 240 5% 96%;
+    --sidebar-border: 240 4% 16%;
+    --sidebar-ring: 326 100% 60%;
   }
 }
 
@@ -95,19 +56,31 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
+
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-600 rounded hover:bg-slate-500;
+  }
 }
 
 @layer components {
   .dashboard-card {
-    @apply bg-card rounded-lg border p-5 shadow-card transition-all duration-300 hover:shadow-card-hover;
+    @apply bg-slate-800 rounded-lg border border-slate-700 p-5 shadow-card transition-all duration-300 hover:shadow-card-hover;
   }
 
   .page-title {
-    @apply mb-6 text-2xl font-bold tracking-tight font-heading;
+    @apply mb-6 text-2xl font-bold tracking-tight text-slate-100 font-heading;
   }
 
   .section-title {
-    @apply mb-4 text-xl font-semibold font-heading;
+    @apply mb-4 text-xl font-semibold text-slate-200 font-heading;
   }
   
   .status-badge {
@@ -115,19 +88,19 @@
   }
   
   .status-paid {
-    @apply bg-status-paid/10 text-status-paid;
+    @apply bg-emerald-500/30 text-emerald-300;
   }
   
   .status-pending {
-    @apply bg-status-pending/10 text-status-pending;
+    @apply bg-amber-500/30 text-amber-300;
   }
   
   .status-processing {
-    @apply bg-status-processing/10 text-status-processing;
+    @apply bg-primary/30 text-primary;
   }
   
   .status-cancelled {
-    @apply bg-status-cancelled/10 text-status-cancelled;
+    @apply bg-red-500/30 text-red-300;
   }
   
   .btn-hover-effect {
