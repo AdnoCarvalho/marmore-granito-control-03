@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { UsersRound, TrendingUp, UserRound, Scissors } from "lucide-react";
+import { UsersRound, TrendingUp, UserRound, Scissors, Eye, Nail } from "lucide-react";
 import { mockSales, mockClients } from "./list/mockData";
 
 const SalesDashboard = () => {
@@ -53,6 +53,17 @@ const SalesDashboard = () => {
 
   const mostPopularService = serviceNames[mostPopularServiceId] || "Serviço não especificado";
 
+  // Matching service icon
+  const getServiceIcon = (serviceId: string) => {
+    switch (serviceId) {
+      case "1": return <Eye className="h-6 w-6 text-purple-500" />;
+      case "2": return <Eye className="h-6 w-6 text-blue-500" />;
+      case "3": return <Nail className="h-6 w-6 text-emerald-500" />;
+      case "4": return <Nail className="h-6 w-6 text-emerald-500" />;
+      default: return <Scissors className="h-6 w-6 text-emerald-500" />;
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
       {/* Total Revenue */}
@@ -95,7 +106,7 @@ const SalesDashboard = () => {
             <p className="text-sm text-slate-400 mt-1">{maxCount} atendimentos</p>
           </div>
           <div className="h-12 w-12 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-            <Scissors className="h-6 w-6 text-emerald-500" />
+            {getServiceIcon(mostPopularServiceId)}
           </div>
         </CardContent>
       </Card>
