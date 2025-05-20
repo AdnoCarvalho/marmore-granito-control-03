@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { UsersRound, TrendingUp, UserRound, Scissors, Eye, Nail } from "lucide-react";
+import { UsersRound, TrendingUp, UserRound, Scissors, Eye, Snail } from "lucide-react";
 import { mockSales, mockClients } from "./list/mockData";
 
 const SalesDashboard = () => {
@@ -58,8 +58,8 @@ const SalesDashboard = () => {
     switch (serviceId) {
       case "1": return <Eye className="h-6 w-6 text-purple-500" />;
       case "2": return <Eye className="h-6 w-6 text-blue-500" />;
-      case "3": return <Nail className="h-6 w-6 text-emerald-500" />;
-      case "4": return <Nail className="h-6 w-6 text-emerald-500" />;
+      case "3": return <Snail className="h-6 w-6 text-emerald-500" />; // Changed from Nail to Snail
+      case "4": return <Snail className="h-6 w-6 text-emerald-500" />; // Changed from Nail to Snail
       default: return <Scissors className="h-6 w-6 text-emerald-500" />;
     }
   };
