@@ -24,7 +24,7 @@ const DashboardContent = ({ children }: DashboardLayoutProps) => {
     >
       <Card 
         className={cn(
-          "shadow-card border bg-white/80 backdrop-blur-sm",
+          "shadow-card border border-slate-700 bg-card backdrop-blur-sm",
           isCollapsed 
             ? "rounded-none sm:rounded-md md:rounded-xl p-2 sm:p-4 md:p-6" 
             : "rounded-xl p-4 sm:p-6"
